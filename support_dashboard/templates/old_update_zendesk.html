@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'update_zendesk/fonts/icomoon/style.css' %}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'update_zendesk/css/owl.carousel.min.css' %}"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'update_zendesk/css/bootstrap.min.css' %}"
+    />
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'update_zendesk/css/style.css' %}" />
+
+    <title>Contact Form #1</title>
+  </head>
+  <body>
+    <div class="content">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="row align-items-center">
+              <div class="col-lg-7 mb-5 mb-lg-0">
+                <h3 class="mb-5">
+                  Add Zendesk ID and the Tag and click on Update Zendesk.
+                </h3>
+
+                <form
+                  class="border-right pr-5 mb-5"
+                  id="zendesk_update_form"
+                  name="zendesk_update_form"
+                  method="POST"
+                  class="login-form"
+                >
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="ticket_id"
+                        id="ticket_id"
+                        placeholder="Ticket ID"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <select
+                        class="form-control"
+                        name="tag_name"
+                        id="tag_name"
+                      >
+                        <option value="" selected disabled>Select a tag</option>
+                        {% for custom_field in all_custom_fields %}
+                        <option value="{{ custom_field }}">
+                          {{ custom_field }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button
+                        type="reset"
+                        id="update_zendesk_button"
+                        class="btn btn-primary rounded-0 py-2 px-4"
+                      >
+                        Update Zendesk
+                      </button>
+                      <span class="submitting"></span>
+                    </div>
+                  </div>
+                  {% if messages %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                  {% endif %}
+                </form>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                  $("#update_zendesk_button").click(function () {
+                    $.ajax({
+                      url: "{% url 'call_zendesk_api' %}",
+                      type: "POST",
+                      data: $("#zendesk_update_form").serialize(),
+                      success: function (response) {
+                        // handle success response here
+                        console.log(response);
+                      },
+                      error: function (xhr, status, error) {
+                        // handle error response here
+                        console.log(error);
+                      },
+                    });
+                  });
+                </script>
+
+                <div id="form-message-warning mt-4"></div>
+                <div id="form-message-success">
+                  Your message was sent, thank you!
+                </div>
+              </div>
+              <div class="col-lg-4 ml-auto">
+                <h3 class="mb-4">What this do!</h3>
+                <p>
+                  This function will update the zendesk ticket with tag list and
+                  custom_fields.
+                </p>
+                <p><a href="#">Read more</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

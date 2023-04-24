@@ -1,0 +1,42 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'login_style.css' %}" />
+
+<div class="login-page">
+  <div class="form">
+    <form action="login" method="POST" class="login-form">
+      {% csrf_token %}
+      <input
+        type="text"
+        type="text"
+        name="username"
+        placeholder="username"
+        required=""
+      />
+      <input
+        type="password"
+        type="text"
+        name="password"
+        placeholder="password"
+        required=""
+      />
+      <button>login</button>
+      <!-- printing messages on UI in case of any mis-infor -->
+      <div class="message-text" id="message-text">
+        {% for message in messages %}
+        <span>{{message}}</span>
+        {% endfor %}
+      </div>
+      <script>
+        var messageText = document.getElementById("message-text");
+        messageText.classList.add("vibrate");
+        setTimeout(function () {
+          messageText.classList.remove("vibrate");
+        }, 3000);
+      </script>
+
+      <p class="message">
+        Not registered? <a href="register">Create an account</a>
+      </p>
+    </form>
+  </div>
+</div>

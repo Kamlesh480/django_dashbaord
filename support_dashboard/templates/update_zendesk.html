@@ -1,0 +1,138 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'update_zendesk/css/bootstrap.min.css' %}"
+    />
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'update_zendesk/css/style.css' %}" />
+
+    <title>Contact Form #1</title>
+  </head>
+  <body>
+    <!-- Add icon library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- Add font awesome icons to buttons -->
+    <form action="{% url 'home' %}" method="POST">
+      {% csrf_token %}
+      <button class="btn" type="submit">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+    </form>
+
+    <div class="content">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="row align-items-center">
+              <div class="col-lg-7 mb-5 mb-lg-0">
+                <h3 class="mb-5">
+                  Add Zendesk ID and the Tag and click on Update Zendesk.
+                </h3>
+
+                <form
+                  action="call_zendesk_api"
+                  class="border-right pr-5 mb-5"
+                  id="zendesk_update_form"
+                  name="zendesk_update_form"
+                  method="POST"
+                  class="login-form"
+                >
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="ticket_id"
+                        id="ticket_id"
+                        placeholder="Ticket ID"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <select
+                        class="form-control"
+                        name="tag_name"
+                        id="tag_name"
+                      >
+                        <option value="" selected disabled>Select a tag</option>
+                        {% for custom_field in all_custom_fields %}
+                        <option value="{{ custom_field }}">
+                          {{ custom_field }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button
+                        id="update_zendesk_button"
+                        class="btn btn-primary rounded-0 py-2 px-4"
+                      >
+                        Update Zendesk
+                      </button>
+                      <span class="submitting"></span>
+                    </div>
+                  </div>
+                  <!-- printing messages on UI in case of any mis-infor -->
+                  <div class="message-text" id="message-text">
+                    {% for message in messages %}
+                    <span>{{message}}</span>
+                    {% endfor %}
+                  </div>
+                  <script>
+                    var messageText = document.getElementById("message-text");
+                    messageText.classList.add("vibrate");
+                    setTimeout(function () {
+                      messageText.classList.remove("vibrate");
+                    }, 3000);
+                  </script>
+                  {% comment %}
+                  <div class="row">
+                    <input
+                      type="button"
+                      value="Previous Page"
+                      onClick="javascript:history.go(-1);"
+                    />
+                  </div>
+                  {% endcomment %}
+                </form>
+
+                <div id="form-message-warning mt-4"></div>
+                <div id="form-message-success">
+                  Your message was sent, thank you!
+                </div>
+              </div>
+              <div class="col-lg-4 ml-auto">
+                <h3 class="mb-4">What this do!</h3>
+                <p>
+                  This function will update the zendesk ticket with tag list and
+                  custom_fields.
+                </p>
+                <p><a href="#">Read more</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
