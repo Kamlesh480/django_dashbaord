@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -130,3 +131,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/"
 # LOGOUT_REDIRECT_URL = "/"
+
+
+GRAPH_MODELS = {
+    "all_applications": True,
+    "group_models": True,
+}
