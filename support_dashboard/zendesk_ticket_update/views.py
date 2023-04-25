@@ -68,7 +68,7 @@ def register(request):
                     username=username, email=email, password=password
                 )
                 user.save()
-                return redirect("")
+                return redirect("/")
         else:
             messages.info(request, "Password not same")
             return redirect("register")

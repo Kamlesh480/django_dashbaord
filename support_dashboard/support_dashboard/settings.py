@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "zendesk_ticket_update",
+    "user_setting",
 ]
 
 MIDDLEWARE = [
