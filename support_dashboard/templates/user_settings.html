@@ -23,24 +23,20 @@
       type="text/css"
       href="{% static 'account_settings/css/style.css' %}"
     />
-  </head>
-  <body>
-    <!-- Add icon library -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <!-- Add font awesome icons to buttons -->
-    <form action="{% url 'home' %}" method="POST">
-      {% csrf_token %}
-      <button class="btn" type="submit">
-        <i class="fa fa-arrow-left"></i>
-      </button>
-    </form>
+  </head>
 
+  <body>
     <section class="py-5 my-5">
       <div class="container">
-        <h1 class="mb-5">Account Settings</h1>
+        <a href="{% url 'home' %}" class="btn btn-light back-button">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <span class="button-text">Account Settings</span>
+
         <div class="bg-white shadow rounded-lg d-block d-sm-flex">
           <div class="profile-tab-nav border-right">
             <div class="p-4">
@@ -182,14 +178,6 @@
                     />
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Bio</label>
-                    <textarea class="form-control" rows="4">
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea
-                    >
-                  </div>
-                </div>
               </div>
               <div>
                 <button class="btn btn-primary">Update</button>
@@ -262,11 +250,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error 
               </table>
 
               <form method="POST" action="/settings" class="credentials-form">
-                <input
-                  type="hidden"
-                  name="csrfmiddlewaretoken"
-                  value="XiUcspYvCxcrDItzDnEtKF4ivSFDVPVvKzsjox1C827T4R89hEHLCJqPtpSbIg99"
-                />
+                {% csrf_token %}
 
                 <div class="row">
                   <div class="col-md-4">
