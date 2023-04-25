@@ -1,16 +1,17 @@
-<form method="POST" action="{% url 'user_settings' %}">
+<form method="POST" action="settings_fun_calls">
   {% csrf_token %}
-  <label for="name">Name:</label>
-  <input type="text" name="name" required />
+  <input type="hidden" name="update_zendesk" value="update_zendesk" />
 
-  <label for="description">Description:</label>
-  <textarea name="description" required></textarea>
+  <div class="form-group">
+    <label for="param1">Parameter 1:</label>
+    <input
+      type="text"
+      name="param1"
+      id="param1"
+      required
+      class="form-control"
+    />
+  </div>
 
-  <label for="username">Username:</label>
-  <input type="text" name="username" required />
-
-  <label for="api_key">API Key:</label>
-  <input type="text" name="api_key" required />
-
-  <input type="submit" value="Save" />
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
