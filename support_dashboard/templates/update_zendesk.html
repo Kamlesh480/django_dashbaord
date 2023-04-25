@@ -17,7 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="{% static 'update_zendesk/css/style.css' %}" />
 
-    <title>Contact Form #1</title>
+    <title>Update Zendesk</title>
   </head>
   <body>
     <!-- Add icon library -->
@@ -52,6 +52,11 @@
                   class="login-form"
                 >
                   {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="api_key_name"
+                    value="update_zendesk"
+                  />
                   <div class="row">
                     <div class="col-md-12 form-group">
                       <input
@@ -84,6 +89,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <button
+                        type="submit"
                         id="update_zendesk_button"
                         class="btn btn-primary rounded-0 py-2 px-4"
                       >

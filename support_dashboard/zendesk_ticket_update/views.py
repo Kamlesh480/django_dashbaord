@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 import requests
+from user_setting.models import AutomationCredentials
+
+
 from .cred import (
     headers,
     all_custom_fields,
@@ -83,8 +86,18 @@ def update_zendesk(request):
     )
 
 
-def making_zendes_api_calls(ticket_id, custom_field):
+def get_api_key_for_user_and_name(user, name):
+    try:
+        credentials = AutomationCredentials.objects.get(user=user, name=name)
+        return credentials.api_key
+    except AutomationCredentials.DoesNotExist:
+        return None
+
+
+def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
     url = base_url.format(ticket_id)
+
+    # update headers for api_key_value
 
     try:
         print("Fetching ticket {}: Start".format(ticket_id))
@@ -117,15 +130,27 @@ def call_zendesk_api(request):
     if request.method == "POST":
         ticket_id = request.POST.get("ticket_id")
         tag_name = request.POST.get("tag_name")
+        api_key_name = request.POST.get("api_key_name")
 
         # Call API with ticket_id and tag_name
-        print("get the values: {} and {}".format(ticket_id, tag_name))
-        # payload = making_zendes_api_calls(ticket_id, tag_name)
-        # print("payload is {}".format(payload))
-
-        messages.success(
-            request, "Ticket {} updated with tag {}".format(ticket_id, tag_name)
+        print(
+            "get the values: {} and {} and api_token_name: {}".format(
+                ticket_id, tag_name, api_key_name
+            )
         )
+        user = request.user
+        api_key_value = get_api_key_for_user_and_name(user, api_key_name)
+        print("api_key_value is:{}".format(api_key_value))
+        if api_key_value is not None:
+            # payload = making_zendes_api_calls(ticket_id, tag_name, api_key_value)
+            # print("payload is {}".format(payload))
+
+            messages.success(
+                request,
+                "Ticket {} updated with tag {} and API key".format(ticket_id, tag_name),
+            )
+        else:
+            return HttpResponse("API key not found")
 
         # return a success response
         # return JsonResponse({"status": "success"})
