@@ -237,30 +237,91 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error 
               aria-labelledby="security-tab"
             >
               <h3 class="mb-4">Automation Credentials</h3>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" />
+
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>API Key</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for credentials in credentials_list %}
+                  <tr>
+                    <td>{{ credentials.name }}</td>
+                    <td>{{ credentials.api_key }}</td>
+                    <td>{{ credentials.description }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="3">No credentials found.</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <form method="POST" action="/settings" class="credentials-form">
+                <input
+                  type="hidden"
+                  name="csrfmiddlewaretoken"
+                  value="XiUcspYvCxcrDItzDnEtKF4ivSFDVPVvKzsjox1C827T4R89hEHLCJqPtpSbIg99"
+                />
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="name">Name:</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required=""
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="api_key">API Key:</label>
+                      <input
+                        type="text"
+                        name="api_key"
+                        required=""
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="description">Description:</label>
+                      <input
+                        type="text"
+                        name="description"
+                        required=""
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-12 text-center">
+                    <input
+                      type="submit"
+                      value="Add Key"
+                      class="btn btn-primary"
+                    />
+                    <button class="btn btn-light">Cancel</button>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Api key:</label>
-                    <input type="text" class="form-control" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Description</label>
-                    <input type="text" class="form-control" />
-                  </div>
-                </div>
-              </div>
+              </form>
+
+              {% comment %}
               <div>
                 <button class="btn btn-primary">Update</button>
                 <button class="btn btn-light">Cancel</button>
               </div>
+              {% endcomment %}
             </div>
             <div
               class="tab-pane fade"
