@@ -8,7 +8,7 @@ def user_settings(request):
     # Get the credentials for the current user
     creds = AutomationCredentials.objects.filter(user=request.user)
     # Pass the credentials to the template
-    return render(request, "user_settings.html", {"credentials": creds})
+    return render(request, "ui.html", {"credentials": creds})
 
 
 @login_required
