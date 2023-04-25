@@ -10,6 +10,7 @@ body {
 
 .profile-tab-nav {
   min-width: 250px;
+  background: #181824;
 }
 
 .tab-content {
@@ -24,7 +25,7 @@ body {
   padding: 15px 20px;
   border-bottom: 1px solid #ddd;
   border-radius: 0;
-  color: #333;
+  color: #8e94a9;
 }
 .nav-pills a.nav-link i {
   width: 20px;
@@ -42,4 +43,8 @@ body {
   padding-bottom: 10px !important;
   margin-top: 20px !important;
   margin-bottom: 20px !important;
+}
+
+.text-center {
+  color: white;
 }
