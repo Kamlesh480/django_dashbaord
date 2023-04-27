@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
+from django.http import HttpResponseRedirect
 
 
 @login_required
-def user_settings(request):
+def settings(request):
     if request.method == "POST":
         # get data from form
         name = request.POST["name"]
@@ -24,7 +25,8 @@ def user_settings(request):
         credential.save()
 
         # redirect to success page
-        return redirect("user_settings")
+        request.session["previous_url"] = request.META.get("HTTP_REFERER")
+        return HttpResponseRedirect(request.session["previous_url"])
 
     else:
         credentials_list = AutomationCredentials.objects.filter(user=request.user)
