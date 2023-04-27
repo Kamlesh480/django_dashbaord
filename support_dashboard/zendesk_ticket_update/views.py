@@ -104,6 +104,9 @@ def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
     url = base_url.format(ticket_id)
 
     # update headers for api_key_value
+    headers["Authorization"] = "Basic " + api_key_value
+
+    print("My header: {}".format(headers))
 
     try:
         print("Fetching ticket {}: Start".format(ticket_id))
@@ -125,11 +128,21 @@ def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
         load["ticket"]["custom_fields"][0]["value"] = custom_field
         payload = json.dumps(load)
 
-    else:
-        payload = json.dumps(load)
-        print("Update ticket {}: Start".format(ticket_id))
+    payload = json.dumps(load)
+    print("Update ticket {}: Start".format(ticket_id))
 
-    return payload
+    # API PUT CALL
+    try:
+        print("Update ticket {}: Start".format(ticket_id))
+        response = requests.request("PUT", url, headers=headers, data=payload)
+        if response.status_code == 200:
+            print("Updating ticket {}: Done".format(ticket_id))
+        else:
+            print(
+                "Updating Ticket: Failed \n Error code: {}".format(response.status_code)
+            )
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
 
 
 def call_zendesk_api(request):
@@ -148,7 +161,7 @@ def call_zendesk_api(request):
         api_key_value = get_api_key_for_user_and_name(user, api_key_name)
         print("api_key_value is:{}".format(api_key_value))
         if api_key_value is not None:
-            # payload = making_zendes_api_calls(ticket_id, tag_name, api_key_value)
+            making_zendes_api_calls(ticket_id, tag_name, api_key_value)
             # print("payload is {}".format(payload))
 
             messages.success(
