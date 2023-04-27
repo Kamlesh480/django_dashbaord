@@ -136,7 +136,7 @@ def call_zendesk_api(request):
     if request.method == "POST":
         ticket_id = request.POST.get("ticket_id")
         tag_name = request.POST.get("tag_name")
-        api_key_name = request.POST.get("api_key_name")
+        api_key_name = request.POST.get("key_name")
 
         # Call API with ticket_id and tag_name
         print(
@@ -153,7 +153,9 @@ def call_zendesk_api(request):
 
             messages.success(
                 request,
-                "Ticket {} updated with tag {} and API key".format(ticket_id, tag_name),
+                "Ticket {} updated with tag {} and API key: {}".format(
+                    ticket_id, tag_name, api_key_name
+                ),
             )
         else:
             return HttpResponse("API key not found")
