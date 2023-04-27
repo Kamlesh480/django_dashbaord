@@ -81,8 +81,14 @@ def register(request):
 
 @login_required
 def update_zendesk(request):
+    all_api_key_names = AutomationCredentials.objects.filter(user=request.user)
     return render(
-        request, "update_zendesk.html", {"all_custom_fields": all_custom_fields}
+        request,
+        "update_zendesk.html",
+        {
+            "all_custom_fields": all_custom_fields,
+            "all_api_key_names": all_api_key_names,
+        },
     )
 
 

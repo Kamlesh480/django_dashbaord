@@ -87,6 +87,23 @@
                   </div>
 
                   <div class="row">
+                    <div class="col-md-12 form-group">
+                      <select
+                        class="form-control"
+                        name="tag_name"
+                        id="tag_name"
+                      >
+                        <option value="" selected disabled>
+                          Select API KEY
+                        </option>
+                        {% for key_name in all_api_key_names %}
+                        <option value="{{ key_name }}">{{ key_name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
                     <div class="col-md-12">
                       <button
                         type="submit"
