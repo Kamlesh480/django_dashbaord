@@ -123,10 +123,11 @@ def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
 
     load["ticket"]["tags"] = tags
     # optimze the call
-    if custom_field in all_custom_fields:
+    if custom_field in all_custom_fields and custom_field != "no update needed":
         load["ticket"]["custom_fields"] = custom_fields
         load["ticket"]["custom_fields"][0]["value"] = custom_field
         payload = json.dumps(load)
+        # print("called if block")
 
     payload = json.dumps(load)
     print("Update ticket {}: Start".format(ticket_id))
@@ -152,11 +153,11 @@ def call_zendesk_api(request):
         api_key_name = request.POST.get("key_name")
 
         # Call API with ticket_id and tag_name
-        print(
-            "get the values: {} and {} and api_token_name: {}".format(
-                ticket_id, tag_name, api_key_name
-            )
-        )
+        # print(
+        #     "get the values: {} and {} and api_token_name: {}".format(
+        #         ticket_id, tag_name, api_key_name
+        #     )
+        # )
         user = request.user
         api_key_value = get_api_key_for_user_and_name(user, api_key_name)
         print("api_key_value is:{}".format(api_key_value))
