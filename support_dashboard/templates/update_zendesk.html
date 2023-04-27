@@ -17,7 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="{% static 'update_zendesk/css/style.css' %}" />
 
-    <title>Contact Form #1</title>
+    <title>Update Zendesk</title>
   </head>
   <body>
     <!-- Add icon library -->
@@ -52,6 +52,7 @@
                   class="login-form"
                 >
                   {% csrf_token %}
+
                   <div class="row">
                     <div class="col-md-12 form-group">
                       <input
@@ -82,8 +83,36 @@
                   </div>
 
                   <div class="row">
+                    {% if all_api_key_names %}
+                    <div class="col-md-12 form-group">
+                      <select
+                        class="form-control"
+                        name="key_name"
+                        id="key_name"
+                      >
+                        <option value="" selected disabled>
+                          Select API KEY
+                        </option>
+                        {% for key_name in all_api_key_names %}
+                        <option value="{{ key_name }}">{{ key_name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12">
+                      <p>
+                        No API key is added. Please add one
+                        <a href="{% url 'user_setting:user_settings' %}">here</a
+                        >.
+                      </p>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="row">
                     <div class="col-md-12">
                       <button
+                        type="submit"
                         id="update_zendesk_button"
                         class="btn btn-primary rounded-0 py-2 px-4"
                       >

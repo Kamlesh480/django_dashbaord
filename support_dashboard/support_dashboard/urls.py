@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("zendesk_ticket_update.urls")),
+    path("", include(("user_setting.urls", "user_setting"), namespace="user_setting")),
 ]

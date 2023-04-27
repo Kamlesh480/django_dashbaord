@@ -1,0 +1,17 @@
+<form method="POST" action="settings_fun_calls">
+  {% csrf_token %}
+  <input type="hidden" name="update_zendesk" value="update_zendesk" />
+
+  <div class="form-group">
+    <label for="param1">Parameter 1:</label>
+    <input
+      type="text"
+      name="param1"
+      id="param1"
+      required
+      class="form-control"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

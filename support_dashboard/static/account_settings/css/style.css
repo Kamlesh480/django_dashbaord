@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+body {
+  background: #f0f1f6;
+  font-family: "Roboto", sans-serif;
+}
+
+.shadow {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.profile-tab-nav {
+  min-width: 250px;
+  background: #181824;
+}
+
+.tab-content {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.nav-pills a.nav-link {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  color: #8e94a9;
+}
+.nav-pills a.nav-link i {
+  width: 20px;
+}
+
+.img-circle img {
+  height: 100px;
+  width: 100px;
+  border-radius: 100%;
+  border: 5px solid #fff;
+}
+
+.py-5.my-5 {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+.text-center {
+  color: white;
+}
+
+form {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+textarea {
+  height: 200px;
+}
+
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
