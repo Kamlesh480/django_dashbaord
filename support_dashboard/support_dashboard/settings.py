@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "zendesk_ticket_update",
     "user_setting",
+    "auditlog",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 
 ROOT_URLCONF = "support_dashboard.urls"

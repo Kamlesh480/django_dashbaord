@@ -1,7 +1,11 @@
 from django.db import models
+from auditlog.registry import auditlog
 
 
 # Create your models here.
 class Overview(models.Model):
     name = models.CharField(max_length=100)
     detail = models.CharField(max_length=500)
+
+
+auditlog.register(Overview)

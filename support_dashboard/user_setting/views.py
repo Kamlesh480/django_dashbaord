@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from .models import UsersLogs
 
 
 @login_required
@@ -25,12 +27,31 @@ def settings(request):
             # save credential to database
             credential.save()
 
+            # Create log entry
+            action = "Added new API key"
+            description = (
+                f"User {request.user.username} added a new key with key name: {name}"
+            )
+            UsersLogs.objects.create(
+                user=request.user, action=action, description=description
+            )
+
         elif "delete_key" in request.POST:
             # get credential ID from form
+            name = request.POST["name"]
             credential_id = request.POST["credential_id"]
 
             # delete credential from database
             AutomationCredentials.objects.filter(id=credential_id).delete()
+
+            # Create log entry
+            action = "API key Deleted"
+            description = (
+                f"User {request.user.username} Deleted a api key with key-name:{name}"
+            )
+            UsersLogs.objects.create(
+                user=request.user, action=action, description=description
+            )
 
         # redirect to success page
         request.session["previous_url"] = request.META.get("HTTP_REFERER")
