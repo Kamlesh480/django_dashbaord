@@ -233,15 +233,97 @@
                     <th>Name</th>
                     <th>API Key</th>
                     <th>Description</th>
+                    <th>Delete Key</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for credentials in credentials_list %}
+                  {% for credential in credentials_list %}
                   <tr>
-                    <td>{{ credentials.name }}</td>
-                    <td>{{ credentials.api_key }}</td>
-                    <td>{{ credentials.description }}</td>
+                    <td>{{ credential.name|truncatechars:20 }}</td>
+                    <td>{{ credential.api_key|truncatechars:20 }}</td>
+                    <td>{{ credential.description|truncatechars:20 }}</td>
+                    <td>
+                      <form
+                        method="post"
+                        class="form_for_delete_button"
+                        action="settings"
+                      >
+                        {% csrf_token %}
+                        <input
+                          type="hidden"
+                          name="credential_id"
+                          value="{{ credential.id }}"
+                        />
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm delete-button"
+                          data-toggle="modal"
+                          data-target="#deleteModal{{ credential.id }}"
+                        >
+                          <i class="fa fa-trash"></i> Delete
+                        </button>
+                      </form>
+
+                      <!-- Delete confirmation modal -->
+                      <div
+                        class="modal fade"
+                        id="deleteModal{{ credential.id }}"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="deleteModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="deleteModalLabel">
+                                Delete API Key
+                              </h5>
+                              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Are you sure you want to delete?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <form
+                                method="post"
+                                action="settings"
+                                class="form_for_delete_button"
+                              >
+                                {% csrf_token %}
+                                <input
+                                  type="hidden"
+                                  name="credential_id"
+                                  value="{{ credential.id }}"
+                                />
+                                <input
+                                  type="submit"
+                                  name="delete_key"
+                                  value="Yes"
+                                  class="btn btn-danger"
+                                />
+                                <button
+                                  type="button"
+                                  class="btn btn-secondary"
+                                  data-dismiss="modal"
+                                >
+                                  No
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
+
                   {% empty %}
                   <tr>
                     <td colspan="3">No credentials found.</td>
@@ -293,20 +375,27 @@
                   <div class="col-md-12 text-center">
                     <input
                       type="submit"
+                      name="add_key"
                       value="Add Key"
                       class="btn btn-primary"
                     />
-                    <button class="btn btn-light">Cancel</button>
+                    <button
+                      class="btn btn-light"
+                      onclick="clearFields()"
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                    <script>
+                      function clearFields() {
+                        document.getElementsByName("name")[0].value = "";
+                        document.getElementsByName("description")[0].value = "";
+                        document.getElementsByName("api_key")[0].value = "";
+                      }
+                    </script>
                   </div>
                 </div>
               </form>
-
-              {% comment %}
-              <div>
-                <button class="btn btn-primary">Update</button>
-                <button class="btn btn-light">Cancel</button>
-              </div>
-              {% endcomment %}
             </div>
             <div
               class="tab-pane fade"

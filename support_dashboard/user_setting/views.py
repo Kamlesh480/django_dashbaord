@@ -8,21 +8,29 @@ from django.http import HttpResponseRedirect
 @login_required
 def settings(request):
     if request.method == "POST":
-        # get data from form
-        name = request.POST["name"]
-        description = request.POST["description"]
-        api_key = request.POST["api_key"]
+        if "add_key" in request.POST:
+            # get data from form
+            name = request.POST["name"]
+            description = request.POST["description"]
+            api_key = request.POST["api_key"]
 
-        # create new credential object
-        credential = AutomationCredentials(
-            user=request.user,
-            name=name,
-            description=description,
-            api_key=api_key,
-        )
-        print("wow we have our API cred: {}".format(credential))
-        # save credential to database
-        credential.save()
+            # create new credential object
+            credential = AutomationCredentials(
+                user=request.user,
+                name=name,
+                description=description,
+                api_key=api_key,
+            )
+
+            # save credential to database
+            credential.save()
+
+        elif "delete_key" in request.POST:
+            # get credential ID from form
+            credential_id = request.POST["credential_id"]
+
+            # delete credential from database
+            AutomationCredentials.objects.filter(id=credential_id).delete()
 
         # redirect to success page
         request.session["previous_url"] = request.META.get("HTTP_REFERER")
