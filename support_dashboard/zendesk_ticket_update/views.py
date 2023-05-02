@@ -118,7 +118,7 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
             tags.append(additional_tag)
 
             # Create log entry
-            action = "Called GET request for {ticket_id}"
+            action = "Called GET request for {}".format(ticket_id)
             application = "update_zendesk"
             description = f"User {request.user.username} made a get request for {url}"
             ZendeskUpdateLogs.objects.create(
@@ -131,7 +131,7 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
         else:
             print(f"Failed to fetch ticket Error code: {response.status_code}")
             # Create log entry
-            action = "Failed GET request for {ticket_id}"
+            action = "Failed GET request for {}".format(ticket_id)
             application = "update_zendesk"
             description = f"User {request.user.username} made a get request for {url}"
             ZendeskUpdateLogs.objects.create(
@@ -162,7 +162,7 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
         if response.status_code == 200:
             print("Updating ticket {}: Done".format(ticket_id))
             # Create log entry
-            action = "Called PUT request data for {ticket_id}"
+            action = "Called PUT request data for {}".format(ticket_id)
             application = "update_zendesk"
             description = f"User {request.user.username} made a put request for {url}"
             ZendeskUpdateLogs.objects.create(
@@ -177,7 +177,7 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
                 "Updating Ticket: Failed \n Error code: {}".format(response.status_code)
             )
             # Create log entry
-            action = "Falied PUT request data for {ticket_id}"
+            action = "Falied PUT request data for {}".format(ticket_id)
             application = "update_zendesk"
             description = f"User {request.user.username} made a put request for {url}"
             ZendeskUpdateLogs.objects.create(
