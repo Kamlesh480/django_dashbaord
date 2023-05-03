@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("zendesk_ticket_update.urls")),
     path("", include(("user_setting.urls", "user_setting"), namespace="settings")),
 ]
+
+
+urlpatterns += staticfiles_urlpatterns()
