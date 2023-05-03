@@ -64,11 +64,9 @@ load["ticket"]["tags"] = tags
 if custom_field in all_custom_fields:
     load["ticket"]["custom_fields"] = custom_fields
     load["ticket"]["custom_fields"][0]["value"] = custom_field
-    payload = json.dumps(load)
 
-else:
-    payload = json.dumps(load)
-    print("Update ticket {}: Start".format(ticket_id))
+payload = json.dumps(load)
+print("Update ticket {}: Start".format(ticket_id))
 
 
 # API PUT CALL

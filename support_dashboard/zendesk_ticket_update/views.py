@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import Overview
+from .models import Overview, ZendeskUpdateLogs
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
@@ -100,10 +100,13 @@ def get_api_key_for_user_and_name(user, name):
         return None
 
 
-def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
+def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
     url = base_url.format(ticket_id)
 
     # update headers for api_key_value
+    headers["Authorization"] = "Basic " + api_key_value
+
+    print("My header: {}".format(headers))
 
     try:
         print("Fetching ticket {}: Start".format(ticket_id))
@@ -113,23 +116,79 @@ def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
             data = json.loads(response.text)
             tags = data["ticket"]["tags"]
             tags.append(additional_tag)
+
+            # Create log entry
+            action = "Called GET request for {}".format(ticket_id)
+            application = "update_zendesk"
+            description = f"User {request.user.username} made a get request for {url}"
+            ZendeskUpdateLogs.objects.create(
+                user=request.user,
+                action=action,
+                status=response.status_code,
+                description=description,
+                application=application,
+            )
         else:
             print(f"Failed to fetch ticket Error code: {response.status_code}")
+            # Create log entry
+            action = "Failed GET request for {}".format(ticket_id)
+            application = "update_zendesk"
+            description = f"User {request.user.username} made a get request for {url}"
+            ZendeskUpdateLogs.objects.create(
+                user=request.user,
+                action=action,
+                status=response.status_code,
+                description=description,
+                application=application,
+            )
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
     load["ticket"]["tags"] = tags
     # optimze the call
-    if custom_field in all_custom_fields:
+    if custom_field in all_custom_fields and custom_field != "no update needed":
         load["ticket"]["custom_fields"] = custom_fields
         load["ticket"]["custom_fields"][0]["value"] = custom_field
         payload = json.dumps(load)
+        # print("called if block")
 
-    else:
-        payload = json.dumps(load)
+    payload = json.dumps(load)
+    print("Update ticket {}: Start".format(ticket_id))
+
+    # API PUT CALL
+    try:
         print("Update ticket {}: Start".format(ticket_id))
-
-    return payload
+        response = requests.request("PUT", url, headers=headers, data=payload)
+        if response.status_code == 200:
+            print("Updating ticket {}: Done".format(ticket_id))
+            # Create log entry
+            action = "Called PUT request data for {}".format(ticket_id)
+            application = "update_zendesk"
+            description = f"User {request.user.username} made a put request for {url}"
+            ZendeskUpdateLogs.objects.create(
+                user=request.user,
+                action=action,
+                status=response.status_code,
+                description=description,
+                application=application,
+            )
+        else:
+            print(
+                "Updating Ticket: Failed \n Error code: {}".format(response.status_code)
+            )
+            # Create log entry
+            action = "Falied PUT request data for {}".format(ticket_id)
+            application = "update_zendesk"
+            description = f"User {request.user.username} made a put request for {url}"
+            ZendeskUpdateLogs.objects.create(
+                user=request.user,
+                action=action,
+                status=response.status_code,
+                description=description,
+                application=application,
+            )
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
 
 
 def call_zendesk_api(request):
@@ -139,16 +198,16 @@ def call_zendesk_api(request):
         api_key_name = request.POST.get("key_name")
 
         # Call API with ticket_id and tag_name
-        print(
-            "get the values: {} and {} and api_token_name: {}".format(
-                ticket_id, tag_name, api_key_name
-            )
-        )
+        # print(
+        #     "get the values: {} and {} and api_token_name: {}".format(
+        #         ticket_id, tag_name, api_key_name
+        #     )
+        # )
         user = request.user
         api_key_value = get_api_key_for_user_and_name(user, api_key_name)
         print("api_key_value is:{}".format(api_key_value))
         if api_key_value is not None:
-            # payload = making_zendes_api_calls(ticket_id, tag_name, api_key_value)
+            making_zendes_api_calls(request, ticket_id, tag_name, api_key_value)
             # print("payload is {}".format(payload))
 
             messages.success(

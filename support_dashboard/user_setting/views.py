@@ -2,29 +2,60 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from .models import UsersLogs
 
 
 @login_required
-def user_settings(request):
+def settings(request):
     if request.method == "POST":
-        # get data from form
-        name = request.POST["name"]
-        description = request.POST["description"]
-        api_key = request.POST["api_key"]
+        if "add_key" in request.POST:
+            # get data from form
+            name = request.POST["name"]
+            description = request.POST["description"]
+            api_key = request.POST["api_key"]
 
-        # create new credential object
-        credential = AutomationCredentials(
-            user=request.user,
-            name=name,
-            description=description,
-            api_key=api_key,
-        )
-        print("wow we have our API cred: {}".format(credential))
-        # save credential to database
-        credential.save()
+            # create new credential object
+            credential = AutomationCredentials(
+                user=request.user,
+                name=name,
+                description=description,
+                api_key=api_key,
+            )
+
+            # save credential to database
+            credential.save()
+
+            # Create log entry
+            action = "Added new API key"
+            description = (
+                f"User {request.user.username} added a new key with key name: {name}"
+            )
+            UsersLogs.objects.create(
+                user=request.user, action=action, description=description
+            )
+
+        elif "delete_key" in request.POST:
+            # get credential ID from form
+            name = request.POST["name"]
+            credential_id = request.POST["credential_id"]
+
+            # delete credential from database
+            AutomationCredentials.objects.filter(id=credential_id).delete()
+
+            # Create log entry
+            action = "API key Deleted"
+            description = (
+                f"User {request.user.username} Deleted a api key with key-name:{name}"
+            )
+            UsersLogs.objects.create(
+                user=request.user, action=action, description=description
+            )
 
         # redirect to success page
-        return redirect("user_settings")
+        request.session["previous_url"] = request.META.get("HTTP_REFERER")
+        return HttpResponseRedirect(request.session["previous_url"])
 
     else:
         credentials_list = AutomationCredentials.objects.filter(user=request.user)

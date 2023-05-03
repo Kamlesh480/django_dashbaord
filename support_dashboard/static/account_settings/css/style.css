@@ -57,6 +57,14 @@ form {
   border-radius: 5px;
 }
 
+.form_for_delete_button {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
 label {
   display: block;
   margin-bottom: 10px;
@@ -89,4 +97,10 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1350px;
+  }
 }
