@@ -87,7 +87,18 @@ WSGI_APPLICATION = "support_dashboard.wsgi.application"
 #     }
 # }
 
-DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
+# DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "mydb_l3sh",
+        "USER": "mydb_l3sh_user",
+        "PASSWORD": "Cm0yqXKSP3PMycq4jRaDMlFQrCwDUCOi",
+        "HOST": "dpg-ch8t0v5gk4qeoo7i84m0-a.oregon-postgres.render.com",
+        "PORT": "5432",
+    }
+}
 
 
 # Password validation
