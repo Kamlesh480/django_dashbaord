@@ -11,3 +11,8 @@ python3 manage.py graph_models -a -g -o erd.png
 Add "No update" option in tags
 
 user setting: Key adding bug fix
+
+
+PythonAnywhere:
+venv path: /home/KamleshHevo/.virtualenvs/django_dashbaord-K3m8rAJq
+project dir: /home/KamleshHevo/django_dashbaord/support_dashboard
