@@ -105,6 +105,7 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
 
     # update headers for api_key_value
     headers["Authorization"] = "Basic " + api_key_value
+    tags = ""
 
     print("My header: {}".format(headers))
 
@@ -141,8 +142,11 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
                 description=description,
                 application=application,
             )
+            return False
+
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
+        return False
 
     load["ticket"]["tags"] = tags
     # optimze the call
@@ -187,8 +191,12 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
                 description=description,
                 application=application,
             )
+            return False
+
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
+        return False
+    return True
 
 
 def call_zendesk_api(request):
@@ -197,19 +205,17 @@ def call_zendesk_api(request):
         tag_name = request.POST.get("tag_name")
         api_key_name = request.POST.get("key_name")
 
-        # Call API with ticket_id and tag_name
-        # print(
-        #     "get the values: {} and {} and api_token_name: {}".format(
-        #         ticket_id, tag_name, api_key_name
-        #     )
-        # )
         user = request.user
         api_key_value = get_api_key_for_user_and_name(user, api_key_name)
-        print("api_key_value is:{}".format(api_key_value))
+        # print("api_key_value is:{}".format(api_key_value))
         if api_key_value is not None:
-            making_zendes_api_calls(request, ticket_id, tag_name, api_key_value)
-            # print("payload is {}".format(payload))
-
+            succeed = making_zendes_api_calls(
+                request, ticket_id, tag_name, api_key_value
+            )
+            if succeed == False:
+                return HttpResponse(
+                    "Request failed, please recheck all the information and try again"
+                )
             messages.success(
                 request,
                 "Ticket {} updated with tag {} and API key: {}".format(
@@ -219,13 +225,8 @@ def call_zendesk_api(request):
         else:
             return HttpResponse("API key not found")
 
-        # return a success response
-        # return JsonResponse({"status": "success"})
         return redirect("update_zendesk")
 
     else:
-        # Render form
-        print("Sorry hogya")
-
         # return a form response
         return render(request, "update_form.html", {})
