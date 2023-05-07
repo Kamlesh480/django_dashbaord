@@ -6,13 +6,17 @@
 python3 manage.py graph_models -a > erd.dot
 python3 manage.py graph_models -a -g -o erd.png
 
-
-
-Add "No update" option in tags
-
-user setting: Key adding bug fix
-
-
-PythonAnywhere:
+4. PythonAnywhere:
 venv path: /home/KamleshHevo/.virtualenvs/django_dashbaord-K3m8rAJq
 project dir: /home/KamleshHevo/django_dashbaord/support_dashboard
+
+5. Git braching
+create new brach from a commit
+git log
+git checkout 4887a2...(commit) - on kamlesh_23
+git push --force origin kamlesh_23
+
+
+create new brach from a existing brach
+git branch new_branch kamlesh_23
+git push -u origin new_branch
