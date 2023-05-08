@@ -26,4 +26,21 @@ git checkout kamlesh_23(other then the brach you want to delete)
 git branch -d new_branch
 git push --delete origin new_branch
 
+6. Env variables
+```echo $SHELL```
+``` nano ~/.bash_profile # or nano ~/.zshrc ```
+This will open the file in nano editor.
+Then, you need to add the **export** command to the file with the name and value of your environment variable.
+``` export NEW_VAR=new_value ```
 
+Ctrl+X, Y, Enter
+``` source ~/.bash_profile # or source ~/.zshrc ```
+
+This will execute the file and set the environment variables.
+```python
+import os
+# Get the value of NEW_VAR
+new_var = os.environ.get("NEW_VAR")
+# Print the value of NEW_VAR
+print("NEW_VAR =", new_var)
+```
