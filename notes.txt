@@ -44,3 +44,9 @@ new_var = os.environ.get("NEW_VAR")
 # Print the value of NEW_VAR
 print("NEW_VAR =", new_var)
 ```
+
+
+7. memcached - cahcing open source
+Refer: https://memcached.org/
+docs: https://docs.djangoproject.com/en/4.2/topics/cache/
+
