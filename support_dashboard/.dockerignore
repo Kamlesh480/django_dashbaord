@@ -1,6 +1,8 @@
 # Exclude version control files
 .git
 .svn
+db.sqlite3
+*.sqlite3
 
 # Exclude development files
 *.pyc
