@@ -1,0 +1,12 @@
+# Exclude version control files
+.git
+.svn
+
+# Exclude development files
+*.pyc
+*.pyo
+__pycache__
+
+# Exclude dependencies and build artifacts
+node_modules
+build
