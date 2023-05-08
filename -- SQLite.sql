@@ -1,3 +1,3 @@
 -- SQLite
 select *
-from user_setting_automationcredentials
+from zendesk_ticket_update_overview
