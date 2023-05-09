@@ -1,68 +1,82 @@
-import requests
-import json
-from credentials import (
-    headers,
-    all_custom_fields,
-    load,
-    base_url,
-    additional_tag,
-    custom_fields,
-    payload,
-)
+import os
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 
-def making_zendes_api_calls(ticket_id, custom_field, api_key_value):
-    url = base_url.format(ticket_id)
+client = WebClient(token=os.environ["SLACK_USER_TOKEN"])
 
-    # update headers for api_key_value
-    headers["Authorization"] = "Basic " + api_key_value
-    tags = ""
-    # load = load
 
-    print("My header: {}".format(headers))
-
+# # message to send
+message = {
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Hello Guys,\nBy working together we can create a more effective and engaging training experience.\nPlease share your feedback to help us bridge gap, if there is any :\n*Trainer Feedback Form*-\nhttps://forms.gle/JvxRgUPpG4tp6Wa89\nNote: You will receive an email for the same.\nIts an anonymous form hence your ID will not be shared, feel free to share your thoughts honestly.",
+            },
+        }
+    ]
+}
+recipient_emails = [
+    "anu.yadav@hevodata.com",
+    # "arun.sunderraj@hevodata.com",
+    "chirag.agarwal@hevodata.com",
+    # "dimple.mk@hevodata.com",
+    # "dipak.patil@hevodata.com",
+    # "geetha.n@hevodata.com",
+    # "kamlesh.chhipa@hevodata.com",
+    # "karthic.c@hevodata.com",
+    # "madhusudhan.gaddam@hevodata.com",
+    # "monica.patel@hevodata.com",
+    # "mridul.juyal@hevodata.com",
+    # "muskan.kesharwani@hevodata.com",
+    # "nathaniel.rampur@hevodata.com",
+    # "nishant.tandon@hevodata.com",
+    # "nitin.birajdar@hevodata.com",
+    # "prashant@hevodata.com",
+    # "rohit.guntuku@hevodata.com",
+    # "sai.rao@hevodata.com",
+    # "sarthak.bhardwaj@hevodata.com",
+    # "sasikumar.reddy@hevodata.com",
+    # "satyam.agrawal@hevodata.com",
+    # "sindhura.devarapalli@hevodata.com",
+    # "skand.agrawal@hevodata.com",
+    # "sneha.r@hevodata.com",
+    # "subham.bansal@hevodata.com",
+    # "sudhanshu.sharan@hevodata.com",
+    # "veeresh.biradar@hevodata.com",
+    # "vinita.mittal@hevodata.com",
+    # "vishnu.bhargav@hevodata.com"
+    "akanksha.singh@hevodata.com",
+    "anmol.baunthiyal@hevodata.com",
+    "madanlal.bidiyasar@hevodata.com",
+    "parthiv.patel@hevodata.com",
+    "pushkar.dayal@hevodata.com",
+    "rahul.kumar@hevodata.com",
+    "raja.pandey@hevodata.com",
+    "shivanshu.dabral@hevodata.com",
+    "siddhartha.chauhan@hevodata.com",
+]
+# recipient_emails=["skand.agrawal@hevodata.com"]
+recipient_ids = []
+for recipient_email in recipient_emails:
     try:
-        print("Fetching ticket {}: Start".format(ticket_id))
-        response = requests.request("GET", url, headers=headers)
-        print(url)
-        print(headers)
+        response = client.users_lookupByEmail(email=recipient_email)
+        recipient_ids.append(response["user"]["id"])
+        print(f"The user ID for {recipient_email} is {response['user']['id']}")
+    except SlackApiError as e:
+        print("Error:", e)
 
-        if response.status_code == 200:
-            print("Fetching ticket {}: Done".format(ticket_id))
-            data = json.loads(response.text)
-            tags = data["ticket"]["tags"]
-            tags.append(additional_tag)
 
-        else:
-            print(f"Failed to fetch ticket Error code: {response.status_code}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-
-    load["ticket"]["tags"] = tags
-    # optimze the call
-    if custom_field in all_custom_fields and custom_field != "no update needed":
-        load["ticket"]["custom_fields"] = custom_fields
-        load["ticket"]["custom_fields"][0]["value"] = custom_field
-        # print("called if block")
-
-    payload = json.dumps(load)
-    print("Update ticket {}: Start".format(ticket_id))
-    print("pyload----------------------")
-    print(payload)
-    print("----------------------pyload")
-
-    # # API PUT CALL
+for recipient_id in recipient_ids:
     try:
-        print("Update ticket {}: Start".format(ticket_id))
-        response = requests.request("PUT", url, headers=headers, data=payload)
-        if response.status_code == 200:
-            print("Updating ticket {}: Done".format(ticket_id))
+        # call the conversations.open method using the WebClient to open a DM channel with the recipient
+        response = client.conversations_open(users=recipient_id)
+        dm_channel_id = response["channel"]["id"]
 
-        else:
-            print(
-                "Updating Ticket: Failed \n Error code: {}".format(response.status_code)
-            )
-
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        # call the chat.postMessage method using the WebClient to send the message to the DM channel
+        response = client.chat_postMessage(channel=dm_channel_id, **message)
+        print(f"Message sent to user {recipient_id}: {response['ts']}")
+    except SlackApiError as e:
+        print(f"Error sending message to user {recipient_id}: {e}")

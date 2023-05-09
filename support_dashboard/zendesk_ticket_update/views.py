@@ -22,7 +22,7 @@ from .cred import (
 
 
 # Create your views here.
-@login_required(login_url="/login/")
+@login_required
 def home(request):
     all_overview = Overview.objects.all()
     return render(request, "home.html", {"all_overview": all_overview})
@@ -77,19 +77,6 @@ def register(request):
             return redirect("register")
     else:
         return render(request, "register.html")
-
-
-@login_required
-def update_zendesk(request):
-    all_api_key_names = AutomationCredentials.objects.filter(user=request.user)
-    return render(
-        request,
-        "update_zendesk.html",
-        {
-            "all_custom_fields": all_custom_fields,
-            "all_api_key_names": all_api_key_names,
-        },
-    )
 
 
 def get_api_key_for_user_and_name(user, name):
@@ -199,7 +186,8 @@ def making_zendes_api_calls(request, ticket_id, custom_field, api_key_value):
     return True
 
 
-def call_zendesk_api(request):
+@login_required
+def update_zendesk(request):
     if request.method == "POST":
         ticket_id = request.POST.get("ticket_id")
         tag_name = request.POST.get("tag_name")
@@ -226,7 +214,13 @@ def call_zendesk_api(request):
             return HttpResponse("API key not found")
 
         return redirect("update_zendesk")
-
     else:
-        # return a form response
-        return render(request, "update_form.html", {})
+        all_api_key_names = AutomationCredentials.objects.filter(user=request.user)
+        return render(
+            request,
+            "update_zendesk.html",
+            {
+                "all_custom_fields": all_custom_fields,
+                "all_api_key_names": all_api_key_names,
+            },
+        )
