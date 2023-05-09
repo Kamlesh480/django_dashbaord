@@ -22,7 +22,7 @@ from .cred import (
 
 
 # Create your views here.
-@login_required(login_url="/login/")
+@login_required
 def home(request):
     all_overview = Overview.objects.all()
     return render(request, "home.html", {"all_overview": all_overview})
