@@ -108,3 +108,25 @@ label.error {
   font-size: 12px;
   color: #000;
 }
+
+.dropdown .dropdown-menu {
+  display: block;
+  position: static;
+  margin-top: 0px;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.dropdown-menu .dropdown-item .dropdown {
+  display: block;
+  width: 100%;
+}
+
+.dropdown-menu .dropdown-item .dropdown .items {
+  max-height: 200px;
+  overflow-y: auto;
+}

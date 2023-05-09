@@ -18,6 +18,7 @@ from .cred import (
     additional_tag,
     custom_fields,
     payload,
+    recipient_emails,
 )
 
 
@@ -224,3 +225,13 @@ def update_zendesk(request):
                 "all_api_key_names": all_api_key_names,
             },
         )
+
+
+def slack_message(request):
+    return render(
+        request,
+        "slack_message.html",
+        {
+            "recipient_emails": recipient_emails,
+        },
+    )

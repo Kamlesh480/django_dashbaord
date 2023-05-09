@@ -9,4 +9,5 @@ urlpatterns = [
     # path("register", views.register, name="register"),
     path("home", views.home, name="home"),
     path("update_zendesk", views.update_zendesk, name="update_zendesk"),
+    path("slack_message", views.slack_message, name="slack_message"),
 ]

@@ -1,0 +1,89 @@
+{% load static %}
+
+<form
+  action="slack_message"
+  class="border-right pr-5 mb-5"
+  id="slack_message_form"
+  name="slack_message_form"
+  method="POST"
+  class="login-form"
+>
+  {% csrf_token %}
+  <script>
+    function updateSelectedRecipients() {
+      var selectedRecipientsCount = document.querySelectorAll(
+        'input[name="selected_people"]:checked'
+      ).length;
+      var selectedRecipientsCountText =
+        "Selected recipients: " + selectedRecipientsCount;
+      document.getElementById("selected_recipients_count").textContent =
+        selectedRecipientsCountText;
+    }
+  </script>
+
+  <div class="row">
+    <div class="col-md-12 form-group">
+      <div class="dropdown">
+        <div class="dropdown-menu" aria-labelledby="recipient_dropdown">
+          <div class="dropdown-item">
+            <div class="dropdown">
+              <span class="anchor">Select Recipients</span>
+              <div><br /></div>
+              <ul class="items">
+                {% for recipient in recipient_emails %}
+                <li>
+                  <input
+                    type="checkbox"
+                    name="selected_people"
+                    value="{{ recipient }}"
+                    onchange="updateSelectedRecipients()"
+                  />
+                  <label>{{ recipient }}</label>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="dropdown-item">
+            <div>
+              <span id="selected_recipients_count">Selected recipients: 0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 form-group">
+      <textarea
+        class="form-control"
+        name="message"
+        id="message"
+        rows="5"
+        placeholder="Message"
+        required
+      ></textarea>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button
+        type="submit"
+        id="send_message_button"
+        class="btn btn-primary rounded-0 py-2 px-4"
+      >
+        Send Message
+      </button>
+      <span class="submitting"></span>
+    </div>
+  </div>
+
+  <!-- printing messages on UI in case of any mis-infor -->
+  <div class="message-text" id="message-text">
+    {% for message in messages %}
+    <span>{{message}}</span>
+    {% endfor %}
+  </div>
+</form>

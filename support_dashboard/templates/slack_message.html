@@ -1,7 +1,7 @@
 {% extends "components/app_base.html" %}
 
 <!--  -->
-{% block title %} Update Zendesk {% endblock %}
+{% block title %} Slack Message {% endblock %}
 
 <!--  -->
 {% block content %}
@@ -12,9 +12,9 @@
         <div class="row align-items-center">
           <div class="col-lg-7 mb-5 mb-lg-0">
             <h3 class="mb-5">
-              Add Zendesk ID and the Tag and click on Update Zendesk.
+              Select peoples you want to send the message and click on button
             </h3>
-            {% include "components/zendesk_app_form.html" %}
+            {% include "components/slack_message_form.html" %}
             <div id="form-message-warning mt-4"></div>
             <div id="form-message-success">
               Your message was sent, thank you!
@@ -23,8 +23,7 @@
           <div class="col-lg-4 ml-auto">
             <h3 class="mb-4">What this do!</h3>
             <p>
-              This function will update the zendesk ticket with tag list and
-              custom_fields.
+              This send a message to all the selected people from the dropdown
             </p>
             <p><a href="#">Read more</a></p>
           </div>
