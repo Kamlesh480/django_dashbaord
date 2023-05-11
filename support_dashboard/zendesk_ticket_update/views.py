@@ -231,7 +231,5 @@ def slack_message(request):
     return render(
         request,
         "slack_message.html",
-        {
-            "recipient_emails": recipient_emails,
-        },
+        {"recipient_emails": recipient_emails},
     )

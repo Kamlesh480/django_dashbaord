@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UsersLogs
 
+from .cred import all_members
+
 
 @login_required
 def settings(request):
@@ -62,7 +64,9 @@ def settings(request):
 
         # if request method is not POST, render the form
         return render(
-            request, "user_settings.html", {"credentials_list": credentials_list}
+            request,
+            "user_settings.html",
+            {"credentials_list": credentials_list, "all_members": all_members},
         )
 
 
