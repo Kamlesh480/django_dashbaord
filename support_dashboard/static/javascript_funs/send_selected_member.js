@@ -1,5 +1,3 @@
-console.log("calling");
-
 document.addEventListener("DOMContentLoaded", function () {
   const createGroupBtn = document.querySelector("#create-group-btn");
   const selectedMembers = [];

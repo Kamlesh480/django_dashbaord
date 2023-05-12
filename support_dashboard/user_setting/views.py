@@ -4,11 +4,11 @@ from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import UsersLogs
+from .models import UsersLogs, TeamMember, Group
 from django.views.decorators.csrf import csrf_protect
 import json
 
-from .cred import all_members
+# from .cred import all_members
 
 
 @login_required
@@ -63,12 +63,18 @@ def settings(request):
 
     else:
         credentials_list = AutomationCredentials.objects.filter(user=request.user)
+        all_groups = Group.objects.filter(user=request.user)
+        all_members = TeamMember.objects.all()
 
         # if request method is not POST, render the form
         return render(
             request,
             "user_settings.html",
-            {"credentials_list": credentials_list, "all_members": all_members},
+            {
+                "credentials_list": credentials_list,
+                "all_members": all_members,
+                "all_groups": all_groups,
+            },
         )
 
 
@@ -80,6 +86,20 @@ def get_api_key_for_user_and_name(user, name):
         return None
 
 
+def create_group(request, selected_members):
+    selected = TeamMember.objects.filter(id__in=selected_members)
+    print(selected)
+    group_name = "Test Group"
+
+    user = request.user
+    print("User:{}".format(user))
+
+    new_group = Group(name=group_name, user=user)
+    new_group.save()
+
+    new_group.members.set(selected_members)
+
+
 @login_required
 @csrf_protect
 def settings_fun_calls(request):
@@ -88,6 +108,9 @@ def settings_fun_calls(request):
         if action == "create_group":
             selected_members = request.POST.getlist("selected_members")
             print(selected_members)
+            create_group(request, selected_members)
+            print("Group Created")
+
             result = selected_members
 
             # return HttpResponse(result)

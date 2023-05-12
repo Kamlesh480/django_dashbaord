@@ -50,17 +50,23 @@
           <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Members</th>
+                <th>Created Time</th>
               </tr>
             </thead>
             <tbody>
-              {% for member in all_members %}
+              {% for group in all_groups %}
               <tr>
-                <td>{{ member.id }}</td>
-                <td>{{ member.name }}</td>
-                <td>{{ member.email }}</td>
+                <td>{{ group.name }}</td>
+                <td>
+                  {% for member in group.members.all %}
+                  <!---->
+                  {{ member.name }} {% if not forloop.last %}, {% endif %}
+                  <!---->
+                  {% endfor %}
+                </td>
+                <td>{{ group.created_at }}</td>
               </tr>
               {% endfor %}
             </tbody>
