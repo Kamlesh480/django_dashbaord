@@ -5,6 +5,8 @@ from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UsersLogs
+from django.views.decorators.csrf import csrf_protect
+import json
 
 from .cred import all_members
 
@@ -79,17 +81,16 @@ def get_api_key_for_user_and_name(user, name):
 
 
 @login_required
+@csrf_protect
 def settings_fun_calls(request):
     if request.method == "POST":
-        action = request.POST.get("update_zendesk")
-        param1 = request.POST.get("param1")
-        # call the appropriate function based on the value of `action`
-        if action == "update_zendesk":
-            user = request.user
-            api_key_name = action
-            api_key_value = get_api_key_for_user_and_name(user, api_key_name)
-            result = api_key_value if api_key_value is not None else "API key not found"
-            return HttpResponse(result)
+        action = request.POST.get("action")
+        if action == "create_group":
+            selected_members = request.POST.getlist("selected_members")
+            print(selected_members)
+            result = selected_members
+
+            # return HttpResponse(result)
         elif action == "function2":
             # result = function2()
             pass

@@ -1,3 +1,5 @@
+{% load static %}
+
 <div
   class="tab-pane fade"
   id="application"
@@ -6,6 +8,7 @@
 >
   <h3 class="mb-4">Slack Groups</h3>
   <div class="container-fluid">
+    <script src="{% static '/javascript_funs/send_selected_member.js' %}"></script>
     <div class="row">
       <div class="col-md-6">
         <div class="table-responsive" style="max-height: 300px">
@@ -36,6 +39,11 @@
             </tbody>
           </table>
         </div>
+        <br />
+        <button id="create-group-btn" type="button" class="btn btn-primary">
+          Create Group
+        </button>
+        <button type="button" class="btn btn-light">Cancel</button>
       </div>
       <div class="col-md-6">
         <div class="table-responsive" style="max-height: 300px">
