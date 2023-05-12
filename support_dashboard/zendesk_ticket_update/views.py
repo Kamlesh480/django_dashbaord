@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 import requests
-from user_setting.models import AutomationCredentials
+from user_setting.models import AutomationCredentials, Group
 
 
 from .cred import (
@@ -228,8 +228,9 @@ def update_zendesk(request):
 
 
 def slack_message(request):
+    all_groups = Group.objects.filter(user=request.user)
     return render(
         request,
         "slack_message.html",
-        {"recipient_emails": recipient_emails},
+        {"all_groups": all_groups},
     )

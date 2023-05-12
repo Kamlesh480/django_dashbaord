@@ -78,14 +78,6 @@ def settings(request):
         )
 
 
-def get_api_key_for_user_and_name(user, name):
-    try:
-        credentials = AutomationCredentials.objects.get(user=user, name=name)
-        return credentials.api_key
-    except AutomationCredentials.DoesNotExist:
-        return None
-
-
 def create_group(request, selected_members):
     selected = TeamMember.objects.filter(id__in=selected_members)
     print(selected)

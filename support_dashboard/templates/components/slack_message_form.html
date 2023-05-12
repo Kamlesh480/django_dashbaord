@@ -9,49 +9,27 @@
   class="login-form"
 >
   {% csrf_token %}
-  <script>
-    function updateSelectedRecipients() {
-      var selectedRecipientsCount = document.querySelectorAll(
-        'input[name="selected_people"]:checked'
-      ).length;
-      var selectedRecipientsCountText =
-        "Selected recipients: " + selectedRecipientsCount;
-      document.getElementById("selected_recipients_count").textContent =
-        selectedRecipientsCountText;
-    }
-  </script>
 
   <div class="row">
+    {% if all_groups %}
     <div class="col-md-12 form-group">
-      <div class="dropdown">
-        <div class="dropdown-menu" aria-labelledby="recipient_dropdown">
-          <div class="dropdown-item">
-            <div class="dropdown">
-              <span class="anchor">Select Recipients</span>
-              <div><br /></div>
-              <ul class="items">
-                {% for recipient in recipient_emails %}
-                <li>
-                  <input
-                    type="checkbox"
-                    name="selected_people"
-                    value="{{ recipient }}"
-                    onchange="updateSelectedRecipients()"
-                  />
-                  <label>{{ recipient }}</label>
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-          <div class="dropdown-item">
-            <div>
-              <span id="selected_recipients_count">Selected recipients: 0</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <select class="form-control" name="group_name" id="group_name">
+        <option value="" selected disabled>Select Group</option>
+        {% for group in all_groups %}
+        <option value="{{ group.name }}">{{ group.name }}</option>
+        {% empty %}
+        <option value="" disabled>No Groups Available</option>
+        {% endfor %}
+      </select>
     </div>
+    {% else %}
+    <div class="col-md-12">
+      <p>
+        No group is added. Please create one
+        <a href="{% url 'user_setting:settings' %}">here</a>.
+      </p>
+    </div>
+    {% endif %}
   </div>
 
   <div class="row">
