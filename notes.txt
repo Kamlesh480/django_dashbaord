@@ -44,3 +44,36 @@ new_var = os.environ.get("NEW_VAR")
 # Print the value of NEW_VAR
 print("NEW_VAR =", new_var)
 ```
+
+
+7. Django Shell - graph_models
+support_dashboard % python3 manage.py shell
+Python 3.10.5 (v3.10.5:f377153967, Jun  6 2022, 12:36:10) [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from zendesk_ticket_update.models import TestModel
+>>> TestModel.objects.all()
+<QuerySet [<TestModel: Test>, <TestModel: Test2>, <TestModel: Test2>]>
+>>> from django.contrib import admin
+>>> print(admin.site.is_registered(TestModel))
+True
+>>> from django.apps import apps
+>>> models = apps.get_models()
+>>> models
+[<class 'django.contrib.admin.models.LogEntry'>, <class 'django.contrib.auth.models.Permission'>, <class 'django.contrib.auth.models.Group'>, <class 'django.contrib.auth.models.User'>, <class 'django.contrib.contenttypes.models.ContentType'>, <class 'django.contrib.sessions.models.Session'>, <class 'zendesk_ticket_update.models.Overview'>, <class 'zendesk_ticket_update.models.ZendeskUpdateLogs'>, <class 'zendesk_ticket_update.models.TestModel'>, <class 'user_setting.models.AutomationCredentials'>, <class 'user_setting.models.UsersLogs'>, <class 'user_setting.models.TeamMember'>, <class 'user_setting.models.Group'>, <class 'auditlog.models.LogEntry'>]
+>>> for model in models:
+...     if admin.site.is_registered(model):
+...         print(model)
+...
+<class 'django.contrib.auth.models.Group'>
+<class 'django.contrib.auth.models.User'>
+<class 'zendesk_ticket_update.models.Overview'>
+<class 'zendesk_ticket_update.models.ZendeskUpdateLogs'>
+<class 'zendesk_ticket_update.models.TestModel'>
+<class 'user_setting.models.AutomationCredentials'>
+<class 'user_setting.models.UsersLogs'>
+<class 'user_setting.models.TeamMember'>
+<class 'user_setting.models.Group'>
+<class 'auditlog.models.LogEntry'>
+>>> print(admin.site.is_registered(TestModel))
+True

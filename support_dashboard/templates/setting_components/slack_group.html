@@ -43,12 +43,46 @@
           </table>
         </div>
         <br />
-        <button id="create-group-btn" type="button" class="btn btn-primary">
+        <style>
+          #group_name {
+            border: 1px solid #ccc;
+            padding: 5px;
+          }
+        </style>
+
+        <div class="form-group">
+          <label for="group_name">Group Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="group_name"
+            name="group_name"
+          />
+        </div>
+        <button
+          id="create-group-btn"
+          type="button"
+          class="btn btn-primary"
+          disabled
+        >
           Create Group
         </button>
         <button type="button" id="cancel-btn" class="btn btn-light">
           Cancel
         </button>
+
+        <script>
+          const groupNameInput = document.querySelector("#group_name");
+          const createGroupBtn = document.querySelector("#create-group-btn");
+
+          groupNameInput.addEventListener("input", () => {
+            if (groupNameInput.value !== "") {
+              createGroupBtn.disabled = false;
+            } else {
+              createGroupBtn.disabled = true;
+            }
+          });
+        </script>
       </div>
       <script src="{% static '/javascript_funs/uncheck_selected.js' %}"></script>
       <div class="col-md-6">

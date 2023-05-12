@@ -78,10 +78,9 @@ def settings(request):
         )
 
 
-def create_group(request, selected_members):
+def create_group(request, selected_members, group_name):
     selected = TeamMember.objects.filter(id__in=selected_members)
     print(selected)
-    group_name = "Test Group"
 
     user = request.user
     print("User:{}".format(user))
@@ -99,8 +98,9 @@ def settings_fun_calls(request):
         action = request.POST.get("action")
         if action == "create_group":
             selected_members = request.POST.getlist("selected_members")
+            group_name = request.POST.get("group_name")
             print(selected_members)
-            create_group(request, selected_members)
+            create_group(request, selected_members, group_name)
             print("Group Created")
 
             result = selected_members
