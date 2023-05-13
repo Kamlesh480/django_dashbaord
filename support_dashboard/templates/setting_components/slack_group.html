@@ -6,9 +6,9 @@
   role="tabpanel"
   aria-labelledby="application-tab"
 >
+  <script src="{% static '/javascript_funs/user_setting_slack_funs.js' %}"></script>
   <h3 class="mb-4">Slack Groups</h3>
   <div class="container-fluid">
-    <script src="{% static '/javascript_funs/send_selected_member.js' %}"></script>
     <div class="row">
       <div class="col-md-6">
         <div class="table-responsive" style="max-height: 300px">
@@ -59,6 +59,7 @@
             name="group_name"
           />
         </div>
+
         <button
           id="create-group-btn"
           type="button"
@@ -67,24 +68,20 @@
         >
           Create Group
         </button>
-        <button type="button" id="cancel-btn" class="btn btn-light">
+        <script>
+          enable_group_button();
+        </script>
+
+        <button
+          type="button"
+          id="cancel-btn"
+          class="btn btn-light"
+          onclick="cancel_selected_members()"
+        >
           Cancel
         </button>
-
-        <script>
-          const groupNameInput = document.querySelector("#group_name");
-          const createGroupBtn = document.querySelector("#create-group-btn");
-
-          groupNameInput.addEventListener("input", () => {
-            if (groupNameInput.value !== "") {
-              createGroupBtn.disabled = false;
-            } else {
-              createGroupBtn.disabled = true;
-            }
-          });
-        </script>
       </div>
-      <script src="{% static '/javascript_funs/uncheck_selected.js' %}"></script>
+
       <div class="col-md-6">
         <div class="table-responsive" style="max-height: 300px">
           {% if all_groups %}
