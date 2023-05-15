@@ -6,7 +6,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UsersLogs, TeamMember, Group
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 import json
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+
 
 # from .cred import all_members
 
@@ -78,6 +82,8 @@ def settings(request):
         )
 
 
+# use the csrf_exempt decorator on your view function to allow cross-site requests
+@csrf_exempt
 def create_group(request, selected_members, group_name):
     selected = TeamMember.objects.filter(id__in=selected_members)
     print(selected)
@@ -101,7 +107,7 @@ def settings_fun_calls(request):
             group_name = request.POST.get("group_name")
             print(selected_members)
             print(group_name)
-            # create_group(request, selected_members, group_name)
+            create_group(request, selected_members, group_name)
             print("Group Created")
 
             result = selected_members

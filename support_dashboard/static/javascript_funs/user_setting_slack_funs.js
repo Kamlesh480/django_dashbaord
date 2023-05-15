@@ -38,6 +38,12 @@ function send_selected_members() {
       xhr.open("POST", "settings_fun_calls", true);
       xhr.setRequestHeader("X-CSRFToken", csrfToken);
       xhr.send(formData);
+
+      // Refresh the page
+      window.alert("New Group created");
+      cancel_selected_members();
+      // Refresh the page by replacing the URL with itself
+      window.location.replace(window.location.href);
     });
   });
 }
