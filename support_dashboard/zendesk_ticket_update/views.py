@@ -228,9 +228,25 @@ def update_zendesk(request):
 
 
 def slack_message(request):
-    all_groups = Group.objects.filter(user=request.user)
-    return render(
-        request,
-        "slack_message.html",
-        {"all_groups": all_groups},
-    )
+    if request.method == "POST":
+        group_name = request.POST.get("group_name")
+        api_key_name = request.POST.get("key_name")
+        message = request.POST.get("message")
+
+        print(group_name)
+        print(api_key_name)
+        print(message)
+
+        return redirect("slack_message")
+
+    else:
+        all_groups = Group.objects.filter(user=request.user)
+        all_api_key_names = AutomationCredentials.objects.filter(user=request.user)
+        return render(
+            request,
+            "slack_message.html",
+            {
+                "all_groups": all_groups,
+                "all_api_key_names": all_api_key_names,
+            },
+        )

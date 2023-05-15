@@ -33,6 +33,26 @@
   </div>
 
   <div class="row">
+    {% if all_api_key_names %}
+    <div class="col-md-12 form-group">
+      <select class="form-control" name="key_name" id="key_name">
+        <option value="" selected disabled>Select API KEY</option>
+        {% for key_name in all_api_key_names %}
+        <option value="{{ key_name }}">{{ key_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <p>
+        No API key is added. Please add one
+        <a href="{% url 'user_setting:settings' %}">here</a>.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
     <div class="col-md-12 form-group">
       <textarea
         class="form-control"
