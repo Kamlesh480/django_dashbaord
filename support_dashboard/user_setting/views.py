@@ -100,7 +100,8 @@ def settings_fun_calls(request):
             selected_members = request.POST.getlist("selected_members")
             group_name = request.POST.get("group_name")
             print(selected_members)
-            create_group(request, selected_members, group_name)
+            print(group_name)
+            # create_group(request, selected_members, group_name)
             print("Group Created")
 
             result = selected_members

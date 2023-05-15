@@ -6,6 +6,8 @@ function send_selected_members() {
       "[name=csrfmiddlewaretoken]"
     ).value;
 
+    const groupNameInput = document.querySelector("#group_name");
+
     createGroupBtn.addEventListener("click", function () {
       const checkboxes = document.querySelectorAll(
         'input[name="selected_members"]'
@@ -18,12 +20,19 @@ function send_selected_members() {
       }
 
       console.log(selectedMembers);
+      console.log(groupNameInput.value);
+
+      if (selectedMembers.length === 0) {
+        window.alert("You have not selected any members.");
+        return;
+      }
 
       const xhr = new XMLHttpRequest();
       const formData = new FormData();
       for (let i = 0; i < selectedMembers.length; i++) {
         formData.append("selected_members", selectedMembers[i]);
       }
+      formData.append("group_name", groupNameInput.value);
       formData.append("action", "create_group");
 
       xhr.open("POST", "settings_fun_calls", true);
@@ -44,6 +53,8 @@ function cancel_selected_members() {
   checkboxes.forEach((checkbox) => {
     checkbox.checked = false;
   });
+
+  document.querySelector("#group_name").value = "";
 }
 
 function enable_group_button() {
