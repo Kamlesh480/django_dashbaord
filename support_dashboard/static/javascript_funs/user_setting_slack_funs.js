@@ -39,11 +39,12 @@ function send_selected_members() {
       xhr.setRequestHeader("X-CSRFToken", csrfToken);
       xhr.send(formData);
 
-      // Refresh the page
-      window.alert("New Group created");
-      cancel_selected_members();
+      // cancel_selected_members();
+
+      // TODO get updated list of group and update perticular html table
+
       // Refresh the page by replacing the URL with itself
-      window.location.replace(window.location.href);
+      // window.location.replace(window.location.href);
     });
   });
 }

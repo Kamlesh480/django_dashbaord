@@ -5,9 +5,9 @@ from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UsersLogs, TeamMember, Group
+from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
@@ -84,7 +84,7 @@ def settings(request):
 
 # use the csrf_exempt decorator on your view function to allow cross-site requests
 @csrf_exempt
-def create_group(request, selected_members, group_name):
+def old_create_group(request, selected_members, group_name):
     selected = TeamMember.objects.filter(id__in=selected_members)
     print(selected)
 
@@ -97,6 +97,30 @@ def create_group(request, selected_members, group_name):
     new_group.members.set(selected_members)
 
 
+def create_group(request, selected_members, group_name):
+    selected = TeamMember.objects.filter(id__in=selected_members)
+    print(selected)
+
+    user = request.user
+    print("User: {}".format(user))
+
+    # Check if a group with the same name already exists
+    existing_group = Group.objects.filter(name=group_name).exists()
+    if existing_group:
+        messages.info(
+            request, "Group already exists with the name '{}'".format(group_name)
+        )
+    else:
+        new_group = Group(name=group_name, user=user)
+        new_group.save()
+
+        new_group.members.set(selected_members)
+        messages.success(
+            request,
+            "Group '{}' created successfully".format(group_name),
+        )
+
+
 @login_required
 @csrf_protect
 def settings_fun_calls(request):
@@ -107,10 +131,11 @@ def settings_fun_calls(request):
             group_name = request.POST.get("group_name")
             print(selected_members)
             print(group_name)
-            create_group(request, selected_members, group_name)
-            print("Group Created")
+            # create_group(request, selected_members, group_name)
 
             result = selected_members
+
+            return redirect("settings")
 
             # return HttpResponse(result)
         elif action == "function2":

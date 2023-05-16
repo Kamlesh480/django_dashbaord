@@ -81,6 +81,12 @@
         >
           Cancel
         </button>
+        <!-- printing messages on UI in case of any mis-infor -->
+        <div class="message-text" id="message-text">
+          {% for message in messages %}
+          <span>{{message}}</span>
+          {% endfor %}
+        </div>
       </div>
 
       <div class="col-md-6">
