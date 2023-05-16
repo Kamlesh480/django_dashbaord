@@ -61,6 +61,8 @@ function cancel_selected_members() {
   });
 
   document.querySelector("#group_name").value = "";
+  const createGroupBtn = document.querySelector("#create-group-btn");
+  createGroupBtn.disabled = true;
 }
 
 function enable_group_button() {
