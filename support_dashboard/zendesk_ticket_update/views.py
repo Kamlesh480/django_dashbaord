@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 import requests
-from user_setting.models import AutomationCredentials, Group
+from user_setting.models import AutomationCredentials, Group, TeamMember
+from django.shortcuts import get_object_or_404
 
 
 from .cred import (
@@ -236,6 +237,10 @@ def slack_message(request):
         print(group_name)
         print(api_key_name)
         print(message)
+
+        group = get_object_or_404(Group, name=group_name, user=request.user)
+        member_emails = group.members.values_list("email", flat=True)
+        print(member_emails)
 
         return redirect("slack_message")
 
