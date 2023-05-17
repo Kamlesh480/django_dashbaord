@@ -39,12 +39,17 @@ function send_selected_members() {
       xhr.setRequestHeader("X-CSRFToken", csrfToken);
       xhr.send(formData);
 
-      // cancel_selected_members();
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          // Do something with the response
+          alert(this.responseText);
+          location.reload();
+        }
+      };
 
       // TODO get updated list of group and update perticular html table
-
       // Refresh the page by replacing the URL with itself
-      // window.location.replace(window.location.href);
+      // location.reload(true);
     });
   });
 }

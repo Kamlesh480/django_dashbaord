@@ -82,11 +82,13 @@
           Cancel
         </button>
         <!-- printing messages on UI in case of any mis-infor -->
+        {% comment %}
         <div class="message-text" id="message-text">
           {% for message in messages %}
           <span>{{message}}</span>
           {% endfor %}
         </div>
+        {% endcomment %}
       </div>
 
       <div class="col-md-6">

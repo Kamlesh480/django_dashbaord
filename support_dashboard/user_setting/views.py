@@ -6,19 +6,16 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UsersLogs, TeamMember, Group
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
 from django.http import JsonResponse
 
 
 # from .cred import all_members
-
-
 @login_required
 def settings(request):
     if request.method == "POST":
         if "add_key" in request.POST:
+            print("adding key")
             # get data from form
             name = request.POST["name"]
             description = request.POST["description"]
@@ -45,6 +42,7 @@ def settings(request):
             )
 
         elif "delete_key" in request.POST:
+            print("deleting key")
             # get credential ID from form
             name = request.POST["name"]
             credential_id = request.POST["credential_id"]
@@ -107,22 +105,17 @@ def create_group(request, selected_members, group_name):
     # Check if a group with the same name already exists
     existing_group = Group.objects.filter(name=group_name).exists()
     if existing_group:
-        messages.info(
-            request, "Group already exists with the name '{}'".format(group_name)
-        )
+        return "Group already exists with the name '{}'".format(group_name)
+
     else:
         new_group = Group(name=group_name, user=user)
         new_group.save()
 
         new_group.members.set(selected_members)
-        messages.success(
-            request,
-            "Group '{}' created successfully".format(group_name),
-        )
+        return "Group '{}' created successfully".format(group_name)
 
 
 @login_required
-@csrf_protect
 def settings_fun_calls(request):
     if request.method == "POST":
         action = request.POST.get("action")
@@ -131,13 +124,15 @@ def settings_fun_calls(request):
             group_name = request.POST.get("group_name")
             print(selected_members)
             print(group_name)
-            # create_group(request, selected_members, group_name)
+            group_statue = create_group(request, selected_members, group_name)
+            print(group_statue)
+
+            # messages.info(request, group_statue)
 
             result = selected_members
+            # return redirect("user_setting:settings")
 
-            return redirect("settings")
-
-            # return HttpResponse(result)
+            return HttpResponse(group_statue)
         elif action == "function2":
             # result = function2()
             pass
@@ -147,4 +142,5 @@ def settings_fun_calls(request):
     else:
         # handle GET requests
         # render the form
-        return render(request, "ui.html")
+        # return render(request, "ui.html")
+        return HttpResponse("not a POST request")
