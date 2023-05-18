@@ -9,6 +9,8 @@ import json
 import requests
 from user_setting.models import AutomationCredentials, Group, TeamMember
 from django.shortcuts import get_object_or_404
+from slack_sdk import WebClient
+import markdown
 
 
 from .cred import (
@@ -19,7 +21,10 @@ from .cred import (
     additional_tag,
     custom_fields,
     payload,
-    recipient_emails,
+)
+
+from .slack_function import (
+    send_message_to_recipient,
 )
 
 
@@ -234,6 +239,8 @@ def slack_message(request):
         api_key_name = request.POST.get("key_name")
         message = request.POST.get("message")
 
+        # text into Markdown format
+        message = markdown.markdown(message)
         print(group_name)
         print(api_key_name)
         print(message)
@@ -241,6 +248,13 @@ def slack_message(request):
         group = get_object_or_404(Group, name=group_name, user=request.user)
         member_emails = group.members.values_list("email", flat=True)
         print(member_emails)
+
+        user = request.user
+        api_key_value = get_api_key_for_user_and_name(user, api_key_name)
+
+        # calling slack functions
+        # client = WebClient(token=api_key_value)
+        # send_message_to_recipient(client, message, member_emails)
 
         return redirect("slack_message")
 
