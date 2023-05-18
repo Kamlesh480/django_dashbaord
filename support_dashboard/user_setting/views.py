@@ -144,3 +144,7 @@ def settings_fun_calls(request):
         # render the form
         # return render(request, "ui.html")
         return HttpResponse("not a POST request")
+
+
+def feedback(request):
+    return render(request, "feedback.html")
