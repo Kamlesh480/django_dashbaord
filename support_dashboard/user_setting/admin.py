@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AutomationCredentials, UsersLogs, TeamMember, Group
+from .models import AutomationCredentials, UsersLogs, TeamMember, Group, Feedback
 
 # Register your models here.
 admin.site.register(AutomationCredentials)
@@ -32,3 +32,11 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Group, GroupAdmin)
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ["user", "feature", "created_at"]
+    search_fields = ["user__username", "feature"]
+
+
+admin.site.register(Feedback, FeedbackAdmin)

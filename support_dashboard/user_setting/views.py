@@ -147,4 +147,13 @@ def settings_fun_calls(request):
 
 
 def feedback(request):
-    return render(request, "feedback.html")
+    if request.method == "POST":
+        feature = request.POST.get("feature")
+        message = request.POST.get("message")
+
+        print(feature)
+        print(message)
+
+        return redirect("user_setting:feedback")
+    else:
+        return render(request, "feedback.html")
