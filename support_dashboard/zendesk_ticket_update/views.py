@@ -253,7 +253,10 @@ def slack_message(request):
         api_key_value = get_api_key_for_user_and_name(user, api_key_name)
 
         # calling slack functions
-        # client = WebClient(token=api_key_value)
+        # try:
+        #     client = WebClient(token=api_key_value)
+        # except:
+        #     return HttpResponse("API key not found")
         # send_message_to_recipient(client, message, member_emails)
 
         return redirect("slack_message")
