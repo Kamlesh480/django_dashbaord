@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import UsersLogs, TeamMember, Group
+from .models import UsersLogs, TeamMember, Group, Feedback
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -153,6 +153,10 @@ def feedback(request):
 
         print(feature)
         print(message)
+
+        # Save the feedback object to the database
+        feedback = Feedback(user=request.user, feature=feature, message=message)
+        feedback.save()
 
         return redirect("user_setting:feedback")
     else:
