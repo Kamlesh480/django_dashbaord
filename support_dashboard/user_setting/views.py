@@ -158,6 +158,6 @@ def feedback(request):
         feedback = Feedback(user=request.user, feature=feature, message=message)
         feedback.save()
 
-        return redirect("user_setting:feedback")
+        return redirect("home")
     else:
         return render(request, "feedback.html")
