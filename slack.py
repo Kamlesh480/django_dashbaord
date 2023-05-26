@@ -3,10 +3,10 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 
-from credentials import recipient_emails, message, SLACK_USER_TOKEN, SLACK_BOT_TOKEN
+from credentials import recipient_emails, message, SLACK_USER_TOKEN
 
 os.environ["SLACK_USER_TOKEN"] = SLACK_USER_TOKEN
-os.environ["SLACK_BOT_TOKEN"] = SLACK_BOT_TOKEN
+
 
 client = WebClient(token=os.environ["SLACK_USER_TOKEN"])
 

@@ -53,3 +53,16 @@ class Group(models.Model):
 
 
 auditlog.register(Group)
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feature = models.CharField(max_length=100)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+auditlog.register(Feedback)

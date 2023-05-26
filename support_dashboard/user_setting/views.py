@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import UsersLogs, TeamMember, Group
+from .models import UsersLogs, TeamMember, Group, Feedback
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -144,3 +144,20 @@ def settings_fun_calls(request):
         # render the form
         # return render(request, "ui.html")
         return HttpResponse("not a POST request")
+
+
+def feedback(request):
+    if request.method == "POST":
+        feature = request.POST.get("feature")
+        message = request.POST.get("message")
+
+        print(feature)
+        print(message)
+
+        # Save the feedback object to the database
+        feedback = Feedback(user=request.user, feature=feature, message=message)
+        feedback.save()
+
+        return redirect("home")
+    else:
+        return render(request, "feedback.html")
