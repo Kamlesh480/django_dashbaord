@@ -7,7 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 import requests
-from user_setting.models import AutomationCredentials
+from user_setting.models import AutomationCredentials, Group, TeamMember
+from django.shortcuts import get_object_or_404
+from slack_sdk import WebClient
+import markdown
 
 
 from .cred import (
@@ -18,6 +21,10 @@ from .cred import (
     additional_tag,
     custom_fields,
     payload,
+)
+
+from .slack_function import (
+    send_message_to_recipient,
 )
 
 
@@ -221,6 +228,47 @@ def update_zendesk(request):
             "update_zendesk.html",
             {
                 "all_custom_fields": all_custom_fields,
+                "all_api_key_names": all_api_key_names,
+            },
+        )
+
+
+def slack_message(request):
+    if request.method == "POST":
+        group_name = request.POST.get("group_name")
+        api_key_name = request.POST.get("key_name")
+        message = request.POST.get("message")
+
+        # text into Markdown format
+        message = markdown.markdown(message)
+        print(group_name)
+        print(api_key_name)
+        print(message)
+
+        group = get_object_or_404(Group, name=group_name, user=request.user)
+        member_emails = group.members.values_list("email", flat=True)
+        print(member_emails)
+
+        user = request.user
+        api_key_value = get_api_key_for_user_and_name(user, api_key_name)
+
+        # calling slack functions
+        # try:
+        #     client = WebClient(token=api_key_value)
+        # except:
+        #     return HttpResponse("API key not found")
+        # send_message_to_recipient(client, message, member_emails)
+
+        return redirect("slack_message")
+
+    else:
+        all_groups = Group.objects.filter(user=request.user)
+        all_api_key_names = AutomationCredentials.objects.filter(user=request.user)
+        return render(
+            request,
+            "slack_message.html",
+            {
+                "all_groups": all_groups,
                 "all_api_key_names": all_api_key_names,
             },
         )

@@ -1,0 +1,74 @@
+{% load static %}
+
+<form
+  action="update_zendesk"
+  class="border-right pr-5 mb-5"
+  id="zendesk_update_form"
+  name="zendesk_update_form"
+  method="POST"
+  class="login-form"
+>
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col-md-12 form-group">
+      <input
+        type="number"
+        class="form-control"
+        name="ticket_id"
+        id="ticket_id"
+        placeholder="Ticket ID"
+        required
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 form-group">
+      <select class="form-control" name="tag_name" id="tag_name">
+        <option value="" selected disabled>Select a tag</option>
+        {% for custom_field in all_custom_fields %}
+        <option value="{{ custom_field }}">{{ custom_field }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    {% if all_api_key_names %}
+    <div class="col-md-12 form-group">
+      <select class="form-control" name="key_name" id="key_name">
+        <option value="" selected disabled>Select API KEY</option>
+        {% for key_name in all_api_key_names %}
+        <option value="{{ key_name }}">{{ key_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <p>
+        No API key is added. Please add one
+        <a href="{% url 'user_setting:settings' %}">here</a>.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button
+        type="submit"
+        id="update_zendesk_button"
+        class="btn btn-primary rounded-0 py-2 px-4"
+      >
+        Update Zendesk
+      </button>
+      <span class="submitting"></span>
+    </div>
+  </div>
+  <!-- printing messages on UI in case of any mis-infor -->
+  <div class="message-text" id="message-text">
+    {% for message in messages %}
+    <span>{{message}}</span>
+    {% endfor %}
+  </div>
+</form>

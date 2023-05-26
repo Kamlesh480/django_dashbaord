@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Overview, ZendeskUpdateLogs
+from .models import Overview, ZendeskUpdateLogs, TestModel
 
 
 # Register your models here.
@@ -18,3 +18,11 @@ class ZendeskUpdateLogsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ZendeskUpdateLogs, ZendeskUpdateLogsAdmin)
+
+
+class TestModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+
+
+admin.site.register(TestModel, TestModelAdmin)
+# admin.site.unregister(TestModel)

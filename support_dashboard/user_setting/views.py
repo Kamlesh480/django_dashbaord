@@ -4,13 +4,18 @@ from django.contrib.auth.decorators import login_required
 from .models import AutomationCredentials
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import UsersLogs
+from .models import UsersLogs, TeamMember, Group, Feedback
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 
+# from .cred import all_members
 @login_required
 def settings(request):
     if request.method == "POST":
         if "add_key" in request.POST:
+            print("adding key")
             # get data from form
             name = request.POST["name"]
             description = request.POST["description"]
@@ -37,6 +42,7 @@ def settings(request):
             )
 
         elif "delete_key" in request.POST:
+            print("deleting key")
             # get credential ID from form
             name = request.POST["name"]
             credential_id = request.POST["credential_id"]
@@ -59,33 +65,74 @@ def settings(request):
 
     else:
         credentials_list = AutomationCredentials.objects.filter(user=request.user)
+        all_groups = Group.objects.filter(user=request.user)
+        all_members = TeamMember.objects.all()
 
         # if request method is not POST, render the form
         return render(
-            request, "user_settings.html", {"credentials_list": credentials_list}
+            request,
+            "user_settings.html",
+            {
+                "credentials_list": credentials_list,
+                "all_members": all_members,
+                "all_groups": all_groups,
+            },
         )
 
 
-def get_api_key_for_user_and_name(user, name):
-    try:
-        credentials = AutomationCredentials.objects.get(user=user, name=name)
-        return credentials.api_key
-    except AutomationCredentials.DoesNotExist:
-        return None
+# use the csrf_exempt decorator on your view function to allow cross-site requests
+@csrf_exempt
+def old_create_group(request, selected_members, group_name):
+    selected = TeamMember.objects.filter(id__in=selected_members)
+    print(selected)
+
+    user = request.user
+    print("User:{}".format(user))
+
+    new_group = Group(name=group_name, user=user)
+    new_group.save()
+
+    new_group.members.set(selected_members)
+
+
+def create_group(request, selected_members, group_name):
+    selected = TeamMember.objects.filter(id__in=selected_members)
+    print(selected)
+
+    user = request.user
+    print("User: {}".format(user))
+
+    # Check if a group with the same name already exists
+    existing_group = Group.objects.filter(name=group_name).exists()
+    if existing_group:
+        return "Group already exists with the name '{}'".format(group_name)
+
+    else:
+        new_group = Group(name=group_name, user=user)
+        new_group.save()
+
+        new_group.members.set(selected_members)
+        return "Group '{}' created successfully".format(group_name)
 
 
 @login_required
 def settings_fun_calls(request):
     if request.method == "POST":
-        action = request.POST.get("update_zendesk")
-        param1 = request.POST.get("param1")
-        # call the appropriate function based on the value of `action`
-        if action == "update_zendesk":
-            user = request.user
-            api_key_name = action
-            api_key_value = get_api_key_for_user_and_name(user, api_key_name)
-            result = api_key_value if api_key_value is not None else "API key not found"
-            return HttpResponse(result)
+        action = request.POST.get("action")
+        if action == "create_group":
+            selected_members = request.POST.getlist("selected_members")
+            group_name = request.POST.get("group_name")
+            print(selected_members)
+            print(group_name)
+            group_statue = create_group(request, selected_members, group_name)
+            print(group_statue)
+
+            # messages.info(request, group_statue)
+
+            result = selected_members
+            # return redirect("user_setting:settings")
+
+            return HttpResponse(group_statue)
         elif action == "function2":
             # result = function2()
             pass
@@ -95,4 +142,22 @@ def settings_fun_calls(request):
     else:
         # handle GET requests
         # render the form
-        return render(request, "ui.html")
+        # return render(request, "ui.html")
+        return HttpResponse("not a POST request")
+
+
+def feedback(request):
+    if request.method == "POST":
+        feature = request.POST.get("feature")
+        message = request.POST.get("message")
+
+        print(feature)
+        print(message)
+
+        # Save the feedback object to the database
+        feedback = Feedback(user=request.user, feature=feature, message=message)
+        feedback.save()
+
+        return redirect("home")
+    else:
+        return render(request, "feedback.html")

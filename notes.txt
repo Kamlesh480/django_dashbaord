@@ -19,6 +19,7 @@ git push --force origin kamlesh_23
 
 #create new brach from a existing brach
 git branch new_branch kamlesh_23
+git checkout new_branch
 git push -u origin new_branch
 
 #delete a brach

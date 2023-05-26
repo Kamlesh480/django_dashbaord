@@ -1,3 +1,4 @@
+{% comment %}
 <form method="POST" action="settings_fun_calls">
   {% csrf_token %}
   <input type="hidden" name="update_zendesk" value="update_zendesk" />
@@ -15,3 +16,8 @@
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% endcomment %}
+
+<div class="input-container" style="">
+  <div><span>POST request failed, please try again!</span></div>
+</div>

@@ -28,3 +28,41 @@ class UsersLogs(models.Model):
 
 
 auditlog.register(UsersLogs)
+
+
+class TeamMember(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+auditlog.register(TeamMember)
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=255)
+    members = models.ManyToManyField(TeamMember, related_name="groups")
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+auditlog.register(Group)
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feature = models.CharField(max_length=100)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+auditlog.register(Feedback)

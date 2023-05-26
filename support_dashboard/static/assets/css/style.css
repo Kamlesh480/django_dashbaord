@@ -14439,7 +14439,7 @@ code {
 
 /* Footer */
 .footer {
-  background: #f0f1f6;
+  background: #fbfcff;
   color: #aab2bd;
   border-top: none;
   padding: 1.5rem 3rem 1.5rem 3rem;
@@ -19474,7 +19474,6 @@ dl li {
 .navbar.fixed-top + .setting-page-body-wrapper {
   padding-top: 0px;
 }
-
 
 @media (min-width: 992px) {
   .sidebar-mini .navbar .navbar-brand-wrapper {

@@ -1,7 +1,7 @@
 {% extends "components/app_base.html" %}
 
 <!--  -->
-{% block title %} Update Zendesk {% endblock %}
+{% block title %} Slack Message {% endblock %}
 
 <!--  -->
 {% block content %}
@@ -11,10 +11,8 @@
       <div class="col-md-10">
         <div class="row align-items-center">
           <div class="col-lg-7 mb-5 mb-lg-0">
-            <h3 class="mb-5">
-              Add Zendesk ID and the Tag and click on Update Zendesk.
-            </h3>
-            {% include "components/zendesk_app_form.html" %}
+            <h3 class="mb-5">Sending a Message to a Group</h3>
+            {% include "components/slack_message_form.html" %}
             <div id="form-message-warning mt-4"></div>
             <div id="form-message-success">
               Your message was sent, thank you!
@@ -22,14 +20,11 @@
           </div>
           <div class="col-lg-4 ml-auto">
             <h3 class="mb-4">What this do!</h3>
-            <p>
-              This function will update the zendesk ticket with tag list and
-              custom_fields.
-            </p>
+            <p>This send a message to all peoples from the select group</p>
             <p><a href="#">Read more</a></p>
             <h3 class="mb-4">User Setting</h3>
             <p>
-              To add new key please check
+              Add new key or create a new group in your setting
               <a href="{% url 'user_setting:settings' %}">here</a>
             </p>
           </div>

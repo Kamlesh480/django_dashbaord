@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'update_zendesk/css/bootstrap.min.css' %}"
+    />
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'update_zendesk/css/style.css' %}" />
+
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+
+  <body>
+    <!-- Add icon library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- Add font awesome icons to buttons -->
+    <form action="{% url 'home' %}" method="POST">
+      {% csrf_token %}
+      <button class="btn" type="submit">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+    </form>
+
+    {% block content %} {% endblock %}
+  </body>
+</html>
