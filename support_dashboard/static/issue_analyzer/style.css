@@ -1,3 +1,44 @@
+.dropdown-container {
+  position: relative;
+  margin: 20px;
+  padding: 10px;
+  width: 200px;
+  background-color: #fff;
+}
+
+.dropdown-container select {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.dropdown-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.table-bordered-custom {
+  border: 1px solid #ddd;
+  border-collapse: separate;
+  border-radius: 4px;
+  background-color: #fff;
+}
+.table-bordered-custom th,
+.table-bordered-custom td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+.table-bordered-custom th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+.table-bordered-custom tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.navbar {
+  z-index: 1; /* Ensure navbar appears above dropdown */
+}
+
 .navbar {
   background-color: #181824;
 }
@@ -10,4 +51,9 @@
 }
 .navbar .nav-link:hover {
   color: #fff;
+}
+
+.custom-button {
+  padding-left: 10px;
+  /* Add any other custom styles you want for the button */
 }/*# sourceMappingURL=style.css.map */

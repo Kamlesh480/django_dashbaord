@@ -1,5 +1,53 @@
 $primary-color: #181824; // Change the primary color to #181824
 
+// drop down style
+.dropdown-container {
+  position: relative;
+  margin: 20px;
+  padding: 10px;
+  width: 200px;
+  background-color: #fff;
+  //   border: 1px solid #ccc;
+}
+
+.dropdown-container select {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.dropdown-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+//table style
+.table-bordered-custom {
+  border: 1px solid #ddd;
+  border-collapse: separate;
+  border-radius: 4px;
+  background-color: #fff;
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+}
+
+//nav bar style
+.navbar {
+  z-index: 1; /* Ensure navbar appears above dropdown */
+}
+
 .navbar {
   background-color: $primary-color;
 
@@ -15,4 +63,10 @@ $primary-color: #181824; // Change the primary color to #181824
       color: #fff;
     }
   }
+}
+
+//button style
+.custom-button {
+  padding-left: 10px;
+  /* Add any other custom styles you want for the button */
 }
