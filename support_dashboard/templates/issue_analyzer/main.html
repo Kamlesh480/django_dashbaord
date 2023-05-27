@@ -33,8 +33,8 @@
         <div class="form-group">
           <select class="form-control mr-2" name="cluster">
             <option value="">Select Cluster</option>
-            <option value="cluster1">us</option>
-            <option value="cluster2">s-denji</option>
+            <option value="us">us</option>
+            <option value="s-denji">s-denji</option>
           </select>
         </div>
         <div class="form-group">
@@ -49,18 +49,57 @@
       </form>
     </nav>
 
+    <style>
+      .col-md-3 {
+        max-width: 19%; /* Change the value as per your requirement */
+      }
+    </style>
+
     <!-- Rest of your HTML content -->
     <div class="row">
       <div class="col-md-3" id="result-container-1"></div>
-    </div>
-    <div class="row">
+      <div class="col-md-6">
+        <div class="col-md-12" id="place-1"></div>
+        <!-- Other HTML content goes here -->
+      </div>
+
       <div class="col-md-12" style="height: 10px"></div>
-    </div>
-    <div class="row">
+
       <div class="col-md-3" id="result-container-2"></div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
+        <div class="col-md-12" id="place-2"></div>
+        <!-- Other HTML content goes here -->
+      </div>
+
+      <div class="col-md-12" style="height: 10px"></div>
+
+      <div
+        class="col-md-3"
+        id="result-container-3"
+        style="margin-left: 10px; display: none"
+      >
+        <div class="content">
+          <input type="checkbox" name="handyman" value="true" />
+          <label style="margin-left: 5px">Handyman</label><br />
+          <input type="checkbox" name="sideline" value="true" />
+          <label style="margin-left: 5px">Sideline</label><br />
+          <input type="checkbox" name="sink" value="true" />
+          <label style="margin-left: 5px">Sink</label><br />
+          <input type="checkbox" name="grafana" value="true" />
+          <label style="margin-left: 5px">Grafana</label><br />
+          <input type="checkbox" name="connector" value="true" />
+          <label style="margin-left: 5px">Connector</label><br />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="col-md-12" id="place-3"></div>
+        <!-- Other HTML content goes here -->
+      </div>
+
+      <div class="col-md-12" style="height: 10px"></div>
+
+      <div class="col-md-3">
         {% csrf_token %}
         <button
           class="btn btn-primary"

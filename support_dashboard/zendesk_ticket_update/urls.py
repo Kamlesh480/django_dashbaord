@@ -18,4 +18,9 @@ urlpatterns = [
         analyzer_views.get_pipeline_detail,
         name="get_pipeline_detail",
     ),
+    path(
+        "get_pipeline_detail2",
+        analyzer_views.get_pipeline_detail2,
+        name="get_pipeline_detail2",
+    ),
 ]
