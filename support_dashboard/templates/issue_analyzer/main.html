@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<script>
+  var pipelineDetailUrl = "{% url 'get_pipeline_detail' %}";
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="{% static '/javascript_funs/issue_analyzer.js' %}"></script>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Analytics Dashboard</title>
+    <link rel="stylesheet" href="{% static 'issue_analyzer/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Analytics Dashboard</a>
+      <form class="form-inline ml-auto" id="dashboard-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control mr-2"
+            placeholder="Pipeline Number"
+            name="pipelineNumber"
+          />
+        </div>
+        <div class="form-group">
+          <select class="form-control mr-2" name="cluster">
+            <option value="">Select Cluster</option>
+            <option value="cluster1">us</option>
+            <option value="cluster2">s-denji</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control mr-2"
+            placeholder="Account Name"
+            name="accountName"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </nav>
+
+    <!-- Rest of your HTML content -->
+    <div id="result-container"></div>
+  </body>
+</html>
