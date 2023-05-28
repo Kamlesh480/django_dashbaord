@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from .data_functions.get_pipeline_data import get_pipeline_tables, get_report_data
 from django.http import JsonResponse
 import json
+from django.views.decorators.csrf import csrf_exempt
 
-url = "https://cache-expiration-copper-blah.trycloudflare.com"
+url = "https://nav-bw-casio-music.trycloudflare.com"
 
 
 def issue_analyzer(request):
@@ -15,6 +16,7 @@ def get_pipeline_detail2(request):
     return render(request, "ui.html")
 
 
+@csrf_exempt
 def get_pipeline_detail(request):
     if request.method == "POST":
         action = request.POST.get("action")
@@ -72,14 +74,33 @@ def get_pipeline_detail(request):
             handyman_connector_poll = data["handyman_connector_poll"]
             handyman_copy_job = data["handyman_copy_job"]
             sideline = data["sideline"]
+            sink = data["sink"]
+            integration = data["integration"]
+            grafana = data["grafana"]
 
             response_data = {
                 "connector_task": connector_task,
                 "handyman_connector_poll": handyman_connector_poll,
                 "handyman_copy_job": handyman_copy_job,
+                "sideline": sideline,
+                "sink": sink,
+                "integration": integration,
+                "grafana": grafana,
             }
 
             return JsonResponse(response_data)
+
+        elif action == "reply_sideline_file":
+            print("in sideline view")
+            schema_name = request.POST.get("rowData[schema_name]")
+            stage = request.POST.get("rowData[stage]")
+            code = request.POST.get("rowData[code]")
+            pipelineNumber = request.POST.get("pipelineNumber")
+            print(schema_name)
+            print(stage)
+            print(code)
+            print(pipelineNumber)
+            return HttpResponse("Replyed the events")
 
     # Return an empty or default response for GET requests
     return HttpResponse("get the view fcuntion boy")

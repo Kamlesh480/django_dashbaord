@@ -52,7 +52,7 @@ function create_table_ui_json(data, div_path, table_name) {
   });
   var table = $("<table></table>")
     .addClass("table table-striped table-hover table-sm")
-    .css("width", "200px");
+    .css("width", "500px");
 
   var thead = $("<thead></thead>").append(
     $("<tr></tr>").append($("<th></th>").text(table_name))
@@ -107,19 +107,200 @@ function create_table_ui_json(data, div_path, table_name) {
   $(div_path).append(tableContainer);
 }
 
+function create_table_ui_json_button(data, div_path, table_name) {
+  // Create the table for data objects
+  var tableContainer = $("<div></div>").addClass("table-responsive").css({
+    "max-height": "180px",
+    "overflow-y": "auto",
+  });
+  var table = $("<table></table>")
+    .addClass("table table-striped table-hover table-sm")
+    .css("width", "500px");
+
+  var thead = $("<thead></thead>").append(
+    $("<tr></tr>").append($("<th></th>").text(table_name))
+  );
+
+  var tbody = $("<tbody></tbody>");
+
+  // Extract column names from the first object
+  var columnNames = [];
+  var firstObject = data[0];
+  for (var key in firstObject) {
+    if (firstObject.hasOwnProperty(key)) {
+      columnNames.push(key);
+    }
+  }
+
+  // Create column headers
+  var headerRow = $("<tr></tr>");
+  for (var i = 0; i < columnNames.length; i++) {
+    var columnName = columnNames[i];
+    headerRow.append($("<th></th>").text(columnName));
+  }
+  headerRow.append($("<th></th>").text("Actions")); // Add Actions column header
+  thead.append(headerRow);
+
+  // Create rows and populate data
+  for (var j = 0; j < data.length; j++) {
+    var object = data[j];
+    var row = $("<tr></tr>");
+
+    for (var k = 0; k < columnNames.length; k++) {
+      var columnName = columnNames[k];
+      var columnValue = object[columnName];
+
+      if (columnValue === null) {
+        columnValue = "NULL";
+      }
+
+      var cell = $("<td></td>").text(columnValue);
+      row.append(cell);
+    }
+
+    // Create button for sending row data
+    var button = $("<button></button>")
+      .text("Replay")
+      .addClass("btn btn-primary btn-sm");
+    button.on("click", createRowDataHandler(object)); // Attach click event handler
+
+    var actionCell = $("<td></td>").append(button);
+    row.append(actionCell);
+
+    tbody.append(row);
+  }
+
+  table.append(thead);
+  table.append(tbody);
+  tableContainer.append(table);
+
+  // Update the result container with the generated HTML
+  console.log(tableContainer);
+  $(div_path).empty();
+  $(div_path).append(tableContainer);
+}
+
+// // Function to handle button click and send row data to Django view
+// function createRowDataHandler(rowData) {
+//   return function () {
+//     // Send rowData to Django view using Ajax or other method
+//     console.log("Sending row data:", rowData);
+//     // Add your code here to send the data to the Django view
+//   };
+// }
+
+// Function to handle button click and send row data to Django view
+function createRowDataHandler(rowData) {
+  return function () {
+    // Send rowData to Django view using Ajax
+    console.log("Sending row data:", rowData);
+    var pipelineNumber = $('input[name="pipelineNumber"]').val();
+
+    // Get the CSRF token value
+    var csrftoken = getCookie("csrftoken");
+
+    // Prepare the data to send
+    var data = {
+      rowData: rowData,
+      csrfmiddlewaretoken: csrftoken,
+      action: "reply_sideline_file",
+      pipelineNumber: pipelineNumber,
+    };
+    console.log(data);
+
+    // Send the data using Ajax
+    $.ajax({
+      url: pipelineDetailUrl,
+      type: "POST",
+      data: data,
+
+      success: function (response) {
+        // Handle the success response from the Django view
+        console.log("Data sent successfully");
+        console.log("Response:", response);
+      },
+      error: function (xhr, status, error) {
+        // Handle the error response
+        console.error("Error:", error);
+      },
+    });
+  };
+}
+
+// Function to get the value of the CSRF token cookie
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function createButtonsFromDict(dict1, dict2) {
+  var placeDiv = document.getElementById("place-1");
+  var placeDivforbutton = document.getElementById("place-3-1");
+
+  // Create buttons from dict1
+  for (var key in dict1) {
+    if (dict1.hasOwnProperty(key)) {
+      var button = document.createElement("button");
+      button.textContent = key;
+      button.setAttribute("onclick", "openLink('" + dict1[key] + "')");
+      button.classList.add("btn", "btn-primary", "m-2");
+
+      placeDivforbutton.appendChild(button);
+    }
+  }
+
+  // Display integration data from dict2
+  var integrationDiv = document.createElement("div");
+  integrationDiv.classList.add("mt-3");
+  integrationDiv.style.padding = "10px"; // Add padding to the div
+
+  var integrationText = "";
+
+  for (var key in dict2) {
+    if (dict2.hasOwnProperty(key)) {
+      var value = dict2[key];
+      if (typeof value === "object") {
+        for (var prop in value) {
+          if (value.hasOwnProperty(prop)) {
+            integrationText += `${prop}: ${value[prop]}\n`;
+          }
+        }
+      } else {
+        integrationText += `${key}: ${value}\n`;
+      }
+    }
+  }
+
+  var integrationTextElement = document.createElement("pre");
+  integrationTextElement.textContent = integrationText;
+  integrationTextElement.style.fontSize = "small"; // Set the font size to small
+  integrationDiv.appendChild(integrationTextElement);
+  placeDiv.appendChild(integrationDiv);
+}
+
+function openLink(url) {
+  // Open the link in a new tab/window
+  window.open(url);
+}
+
 $(document).ready(function () {
   $("#dashboard-form").on("submit", function (event) {
     console.log("calling pipeline button");
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
     // Retrieve CSRF token from the form
     var csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
-    // Retrieve form data
     var formData = $(this).serialize() + "&action=get_tables";
-
-    // console.log(formData);
-
     // Send AJAX request to your Django view
     $.ajax({
       url: pipelineDetailUrl, // Use the variable here
@@ -128,30 +309,12 @@ $(document).ready(function () {
       headers: {
         "X-CSRFToken": csrfToken,
       },
-      //   var srcObjects = response.src_objects;
-      //   var destObjects = response.dest_objects;
+
       success: function (response) {
         var srcObjects = response.src_objects;
         var destObjects = response.dest_objects;
         console.log(srcObjects);
         console.log(destObjects);
-        // var srcObjects = [
-        //   "dept_emp",
-        //   "dept_manager",
-        //   "departments",
-        //   "shivanshu_fruit",
-        //   "test_data_nifi",
-        //   "man_snap_metros",
-        //   "check_snap_schema_regions",
-        //   "regions",
-        // ];
-        // var destObjects = [
-        //   "hack_employees",
-        //   "hack_dept_emp",
-        //   "hack_titles",
-        //   "hack_departments",
-        //   "hack_shivanshu_fruit",
-        // ];
         $(document).ready(function () {
           create_table_ui(srcObjects, "#result-container-1", "Source Tables");
           create_table_ui(
@@ -179,9 +342,6 @@ $(document).ready(function () {
     var pipelineNumber = $('input[name="pipelineNumber"]').val();
     var cluster = $('select[name="cluster"]').val();
     var accountName = $('input[name="accountName"]').val();
-    // console.log(pipelineNumber);
-    // console.log(cluster);
-    // console.log(accountName);
 
     var checkboxes = $('input[type="checkbox"]');
     var data = {};
@@ -230,84 +390,26 @@ $(document).ready(function () {
         var connector_task = response.connector_task;
         var handyman_connector_poll = response.handyman_connector_poll;
         var handyman_copy_job = response.handyman_copy_job;
-        // console.log(srcObjects);
-        // console.log(destObjects);
-        // var sideline = [
-        //   {
-        //     schema_name: "dept",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 300,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        //   {
-        //     schema_name: "ping",
-        //     stage: "MAPPER",
-        //     reason: null,
-        //     total_records: 10,
-        //     status: "UPLOADED",
-        //     code: 301,
-        //     params: null,
-        //   },
-        // ];
-        create_table_ui_json(connector_task, "#place-1", "connector_task");
+        var sideline = response.sideline;
+        var sink = response.sink;
+        var integration = response.integration;
+        var grafana = response.grafana;
+
+        createButtonsFromDict(grafana, integration);
+
+        create_table_ui_json(connector_task, "#place-2", "connector_task");
         create_table_ui_json(
           handyman_connector_poll,
-          "#place-2",
+          "#place-3",
           "handyman_connector_poll"
         );
         create_table_ui_json(
           handyman_copy_job,
-          "#place-3",
+          "#place-4",
           "handyman_copy_job"
         );
+        create_table_ui_json_button(sideline, "#place-5", "sideline");
+        create_table_ui_json(sink, "#place-6", "sink");
       },
       error: function (xhr, status, error) {
         // Handle the error
