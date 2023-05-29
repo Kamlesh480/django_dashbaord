@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 
-url = "https://nav-bw-casio-music.trycloudflare.com"
+url = "https://chair-crude-shuttle-vendors.trycloudflare.com"
 
 
 def issue_analyzer(request):

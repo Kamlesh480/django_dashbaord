@@ -243,15 +243,32 @@ function getCookie(name) {
   return cookieValue;
 }
 
+function transformKey(key) {
+  // Split the key by underscores
+  var words = key.split("_");
+
+  // Join the words without spaces
+  var transformedKey = words.join("");
+
+  return transformedKey;
+}
+// Function to capitalize a word
+function capitalize(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 function createButtonsFromDict(dict1, dict2) {
   var placeDiv = document.getElementById("place-1");
   var placeDivforbutton = document.getElementById("place-3-1");
 
   // Create buttons from dict1
+  // Create buttons from dict1
   for (var key in dict1) {
     if (dict1.hasOwnProperty(key)) {
+      var transformedKey = transformKey(key); // Transform the key value
+
       var button = document.createElement("button");
-      button.textContent = key;
+      button.textContent = transformedKey;
       button.setAttribute("onclick", "openLink('" + dict1[key] + "')");
       button.classList.add("btn", "btn-primary", "m-2");
 
@@ -397,19 +414,15 @@ $(document).ready(function () {
 
         createButtonsFromDict(grafana, integration);
 
-        create_table_ui_json(connector_task, "#place-2", "connector_task");
-        create_table_ui_json(
-          handyman_connector_poll,
-          "#place-3",
-          "handyman_connector_poll"
-        );
+        create_table_ui_json(connector_task, "#place-2", "Connector Tasks");
+        create_table_ui_json(handyman_connector_poll, "#place-3", "Poll Tasks");
         create_table_ui_json(
           handyman_copy_job,
           "#place-4",
-          "handyman_copy_job"
+          "Handyman Copy Jobs"
         );
-        create_table_ui_json_button(sideline, "#place-5", "sideline");
-        create_table_ui_json(sink, "#place-6", "sink");
+        create_table_ui_json_button(sideline, "#place-5", "Sideline Files");
+        create_table_ui_json(sink, "#place-6", "Sink Files");
       },
       error: function (xhr, status, error) {
         // Handle the error
