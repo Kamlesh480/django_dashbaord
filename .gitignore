@@ -14,3 +14,5 @@ __pycache__/
 # Django
 /media/
 *.sqlite3
+*.env
+sasi_env/
